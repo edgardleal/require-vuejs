@@ -1,5 +1,5 @@
 {
-  "name": "require-vue",
+  "name": "require-vuejs",
   "version": "1.0.0",
   "description": "A RequireJS plugin to load and parse VueJS components ( .vue ) ",
   "main": "src/require-vue.js",
@@ -26,6 +26,5 @@
   },
   "homepage": "https://github.com/edgardleal/require-vue#readme",
   "dependencies": {
-    "minify": "^2.0.13"
   }
 }

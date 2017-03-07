@@ -21,6 +21,7 @@ For production usage: ( Fast CDN, long age cache )
 
 index.html
 
+
 `
     <!DOCTYPE html>
     <html lang="en">
@@ -33,6 +34,7 @@ index.html
 `
 ---
 Create your component:  ( component.vue )
+
 `
     <template>
       <div>
