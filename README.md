@@ -5,10 +5,14 @@ This library has only 8Kb.
 
 ## CDN 
 Developent ( last version )
+
 `
     https://rawgit.com/edgardleal/require-vue/master/src/require-vue.js
 `
+
 For production usage: ( Fast CDN, long age cache )
+
 `
-    https://rawgit.com/edgardleal/require-vue/master/dist/require-vue.min.js
+    https://cdn.rawgit.com/edgardleal/require-vue/49f98a03/dist/require-vue.min.js
 `
+
