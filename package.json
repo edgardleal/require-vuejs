@@ -1,0 +1,31 @@
+{
+  "name": "require-vue",
+  "version": "1.0.0",
+  "description": "A RequireJS plugin to load and parse VueJS components ( .vue ) ",
+  "main": "src/require-vue.js",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edgardleal/require-vue.git"
+  },
+  "keywords": [
+    "javascript",
+    "vuejs",
+    "require"
+  ],
+  "author": "Edgard Leal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/edgardleal/require-vue/issues"
+  },
+  "homepage": "https://github.com/edgardleal/require-vue#readme",
+  "dependencies": {
+    "minify": "^2.0.13"
+  }
+}
