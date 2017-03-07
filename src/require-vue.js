@@ -1,5 +1,6 @@
 /*global define, require, module, XMLHttpRequest, document */
-define({
+define("vue", [], function(){
+	return {
     load: function (name, req, onload, config) {
         var url = req.toUrl(name + '.vue');
 
@@ -49,5 +50,6 @@ define({
             });
         });
     }
+	};
 });
 // vim: set ts=4 
