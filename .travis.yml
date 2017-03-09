@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - "0.12"
+env:
+    - ENVIRONMENT=prod
+
+before_install:
+    - "npm install -g grunt"
+    - npm install
+script:
+    - grunt
