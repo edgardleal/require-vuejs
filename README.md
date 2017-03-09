@@ -1,19 +1,28 @@
 # require-vuejs
 > RequireJS plugin to async and dynamic load and parse .vue components 
 
+[![Build Status](https://travis-ci.org/edgardleal/require-vuejs.svg?branch=master)](https://travis-ci.org/edgardleal/require-vuejs)
+
 This library has only 8Kb ( minified ).
+
+## Features
+
+* Real time integration 
+* Don't need build to use
+* Used as RequireJS plugin 
+* You can use syntax detection from your IDE
 
 ## CDN 
 Developent ( last version )
 
 
-    https://rawgit.com/edgardleal/require-vue/master/src/require-vue.js
+    https://rawgit.com/edgardleal/require-vuejs/master/src/require-vuejs.js
 
 
 For production usage: ( Fast CDN, long age cache )
 
 
-    https://cdn.rawgit.com/edgardleal/require-vue/49f98a03/dist/require-vue.min.js
+    https://cdn.rawgit.com/edgardleal/require-vuejs/49f98a03/dist/require-vuejs.min.js
 
 ## Instalation
 
@@ -69,11 +78,11 @@ Create your app code: ( app.js )
     requirejs.config({
         paths: {
             "Vue": "https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.1/vue.min",
-            "require-vue": "https://rawgit.com/edgardleal/require-vue/master/src/require-vue"
+            "require-vuejs": "https://rawgit.com/edgardleal/require-vuejs/master/src/require-vuejs"
         },
         shim: {
             "Vue": {"exports": "Vue"},
-            "require-vue": {deps: ["Vue"]} // automatically load when use Vue
+            "require-vuejs": {deps: ["Vue"]} // automatically load when use Vue
         }
     });
     
