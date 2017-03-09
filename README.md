@@ -1,6 +1,8 @@
 # require-vuejs
 > RequireJS plugin to async and dynamic load and parse .vue components 
 
+[![Build Status](https://travis-ci.org/edgardleal/require-vuejs.svg?branch=master)](https://travis-ci.org/edgardleal/require-vuejs)
+
 This library has only 8Kb ( minified ).
 
 ## CDN 
