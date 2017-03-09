@@ -3,19 +3,19 @@
 
 [![Build Status](https://travis-ci.org/edgardleal/require-vuejs.svg?branch=master)](https://travis-ci.org/edgardleal/require-vuejs)
 
-This library has only 8Kb ( minified ).
+This library has only 4Kb ( minified ).
 
 ## CDN 
 Developent ( last version )
 
 
-    https://rawgit.com/edgardleal/require-vue/master/src/require-vue.js
+    https://rawgit.com/edgardleal/require-vuejs/master/src/require-vuejs.js
 
 
 For production usage: ( Fast CDN, long age cache )
 
 
-    https://cdn.rawgit.com/edgardleal/require-vue/49f98a03/dist/require-vue.min.js
+    https://cdn.rawgit.com/edgardleal/require-vuejs/49f98a03/dist/require-vuejs.min.js
 
 ## Instalation
 
@@ -71,11 +71,10 @@ Create your app code: ( app.js )
     requirejs.config({
         paths: {
             "Vue": "https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.1/vue.min",
-            "require-vue": "https://rawgit.com/edgardleal/require-vue/master/src/require-vue"
+            "vue": "https://rawgit.com/edgardleal/require-vuejs/master/src/require-vuejs"
         },
         shim: {
-            "Vue": {"exports": "Vue"},
-            "require-vue": {deps: ["Vue"]} // automatically load when use Vue
+            "Vue": {"exports": "Vue"}
         }
     });
     
