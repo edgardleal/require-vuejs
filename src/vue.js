@@ -37,7 +37,7 @@ define("vue", ["_cssparser"], function(cssParser) {
             var parse = function(text) {
                var template = extractTemplate(text);
                var source = extractScript(text);
-               if(config.isBuild) {
+               if(!config.isBuild) {
                    cssParser.parse(text);
                } // TODO: Don't optimize css yet 
 
