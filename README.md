@@ -16,14 +16,14 @@ This library has only 4Kb ( minified ).
 Developent ( last version )
 
 
-		https://rawgit.com/edgardleal/require-vuejs/master/dist/require-vuejs.js
+    https://rawgit.com/edgardleal/require-vuejs/master/dist/require-vuejs.js
 
 
 For production usage: ( Fast CDN, long age cache and minified )
 
     https://cdn.rawgit.com/edgardleal/require-vuejs/aeaff6db/dist/require-vuejs.min.js
 
-## Instalation
+## Instalation from [NPM repository](https://www.npmjs.com/package/require-vuejs)
 
 `npm install require-vuejs`
 
