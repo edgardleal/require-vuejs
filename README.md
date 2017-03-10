@@ -5,6 +5,13 @@
 
 This library has only 4Kb ( minified ).
 
+## Features
+
+* Real time integration 
+* Don't need build to use
+* Used as RequireJS plugin 
+* You can use syntax detection from your IDE
+
 ## CDN 
 Developent ( last version )
 

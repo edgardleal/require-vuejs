@@ -7,5 +7,5 @@ env:
 before_install:
     - "npm install -g grunt"
     - npm install
-script:
+script: 
     - grunt
