@@ -16,15 +16,14 @@ This library has only 4Kb ( minified ).
 Developent ( last version )
 
 
-    https://rawgit.com/edgardleal/require-vuejs/master/src/require-vuejs.js
+    https://rawgit.com/edgardleal/require-vuejs/master/dist/require-vuejs.js
 
 
-For production usage: ( Fast CDN, long age cache )
+For production usage: ( Fast CDN, long age cache and minified )
 
+    https://cdn.rawgit.com/edgardleal/require-vuejs/aeaff6db/dist/require-vuejs.min.js
 
-    https://cdn.rawgit.com/edgardleal/require-vuejs/49f98a03/dist/require-vuejs.min.js
-
-## Instalation
+## Instalation from [NPM repository](https://www.npmjs.com/package/require-vuejs)
 
 `npm install require-vuejs`
 
@@ -78,7 +77,7 @@ Create your app code: ( app.js )
     requirejs.config({
         paths: {
             "Vue": "https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.1/vue.min",
-            "vue": "https://rawgit.com/edgardleal/require-vuejs/master/src/require-vuejs"
+            "vue": "https://cdn.rawgit.com/edgardleal/require-vuejs/aeaff6db/dist/require-vuejs.min"
         },
         shim: {
             "Vue": {"exports": "Vue"}
