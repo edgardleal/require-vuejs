@@ -2,6 +2,19 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        jshint: {
+            options: {
+                curly: true,
+                eqeqeq: true,
+                eqnull: true,
+                browser: true,
+                globals: {
+                    define: true,
+                    require: true,
+                }
+            },
+            all: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js']
+        },
         uglify: {
           options: {
             banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
@@ -40,6 +53,7 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
 
-    grunt.registerTask('default', ['requirejs:compile', 'requirejs:dese']);
+    grunt.registerTask('default', ['jshint', 'requirejs:compile', 'requirejs:dese']);
 };

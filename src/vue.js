@@ -8,24 +8,25 @@ define("vue", ["_cssparser"], function(cssParser) {
         load: function (name, req, onload, config) {
             var url, extension; 
 
-			// if file name has an extension, don't add .vue
-			if(/.*(\.vue)|(\.html?)/.test(name)) {
-				extension = "";
-			} else {
-				extension = ".vue";
-			}
+            // if file name has an extension, don't add .vue
+            if(/.*(\.vue)|(\.html?)/.test(name)) {
+                extension = "";
+            } else {
+                extension = ".vue";
+            }
 
             url = req.toUrl(name + extension);
 
-            var functionTemplate = ["(function(template){",
-              "})("];
+            var sourceHeader = config.isBuild?"" : "//# sourceURL=" + location.origin + url + "\n";
+            var functionTemplate = ["(function(template){", "})("];
 
             var extractTemplate = function(text) {
                var start = text.indexOf("<template>");
                var end   = text.indexOf("</template>");
                return text.substring(start + 10, end)
                  .replace(/([^\\])'/g, "$1\\'")
-                 .replace(/[\n\r]+/g, "");
+                 .replace(/[\n\r]+/g, "")
+                 .replace(/ {2,20}/g, " ");
             };
 
             var extractScript = function(text) {
@@ -41,7 +42,8 @@ define("vue", ["_cssparser"], function(cssParser) {
                    cssParser.parse(text);
                } // TODO: Don't optimize css yet 
 
-               return functionTemplate[0] +
+               return sourceHeader +
+                  functionTemplate[0] +
                   source +
                   functionTemplate[1] +
                   "'" + template + "');";
@@ -52,8 +54,8 @@ define("vue", ["_cssparser"], function(cssParser) {
             if(config.isBuild) {
                 var fs = require('fs');
                 loadRemote = function(url, callback) {
-                    var text = js.readFileSync().toString();
-					callback(parse(text));
+                    var text = fs.readFileSync().toString();
+                    callback(parse(text));
                 };
 
             } else {
@@ -68,6 +70,13 @@ define("vue", ["_cssparser"], function(cssParser) {
                     xhttp.send();
                 };
             }
+
+            var createScript = function(script, callback) {
+                var s = document.createElement( 'script' );
+                s.setAttribute( 'innerHTML', script);
+                s.onload = callback;
+                document.body.appendChild( s );
+            };
 
             req([], function() {
                 loadRemote(url, function(text){
