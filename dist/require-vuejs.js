@@ -54,7 +54,6 @@ define("css-parser", [], function() {
 ;
 /*
  * template-parser.js
- * Copyright (C) 2017  <@BRSAECFS10>
  *
  * Distributed under terms of the MIT license.
  */
