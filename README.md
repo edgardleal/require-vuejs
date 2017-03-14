@@ -1,5 +1,5 @@
 # require-vuejs
-> RequireJS plugin to async and dynamic load and parse .vue components 
+> RequireJS plugin to async and dynamic load and parse .vue single file components 
 
 [![Build Status](https://travis-ci.org/edgardleal/require-vuejs.svg?branch=master)](https://travis-ci.org/edgardleal/require-vuejs)
 [![Code Climate](https://codeclimate.com/github/edgardleal/require-vuejs/badges/gpa.svg)](https://codeclimate.com/github/edgardleal/require-vuejs)
@@ -12,6 +12,7 @@ This library has only 4Kb ( minified ).
 * Don't need build to use
 * Used as RequireJS plugin 
 * You can use syntax detection from your IDE
+* Suport for [single file component](https://vuejs.org/v2/guide/single-file-components.html)
 
 ## CDN 
 Developent ( last version )
