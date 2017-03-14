@@ -1,13 +1,15 @@
+/*globals: define, require */
 /*
- * css-parse.js
+ * css-parser.js
  *
  * Distributed under terms of the MIT license.
  */
-if (typeof module === "object") {
-    var define = require("requirejs").define;
-}
 
-define("_cssparser", [], function() {
+/* jshint ignore:start */
+
+/* jshint ignore:end */
+
+define("css-parser", [], function() {
     'use strict';
     var extractCss = function(text) {
         var start = text.indexOf("<style>");
@@ -51,11 +53,45 @@ define("_cssparser", [], function() {
 /* vim: set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab : */
 ;
 /*
+ * template-parser.js
+ * Copyright (C) 2017  <@BRSAECFS10>
+ *
+ * Distributed under terms of the MIT license.
+ */
+/* jshint ignore:start */
+
+/* jshint ignore:end */
+
+define("template-parser", [], function(){
+  'use strict';
+  
+    var extractTemplate = function(text) {
+       var start = text.indexOf("<template>");
+       var end   = text.indexOf("</template>");
+       return text.substring(start + 10, end)
+         .replace(/([^\\])'/g, "$1\\'")
+         .replace(/[\n\r]+/g, "")
+         .replace(/ {2,20}/g, " ");
+    };
+
+
+    return {
+        extractTemplate: extractTemplate
+    };
+    
+});
+/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
+;
+/*
  * vue.js
  *
  * Distributed under terms of the MIT license.
  */
-define("vue", ["_cssparser"], function(cssParser) {
+/* jshint ignore:start */
+
+/* jshint ignore:end */
+
+define("vue", ["css-parser", "template-parser"], function(cssParser, templateParser) {
     return {
         load: function (name, req, onload, config) {
             var url, extension; 
@@ -72,15 +108,6 @@ define("vue", ["_cssparser"], function(cssParser) {
             var sourceHeader = config.isBuild?"" : "//# sourceURL=" + location.origin + url + "\n";
             var functionTemplate = ["(function(template){", "})("];
 
-            var extractTemplate = function(text) {
-               var start = text.indexOf("<template>");
-               var end   = text.indexOf("</template>");
-               return text.substring(start + 10, end)
-                 .replace(/([^\\])'/g, "$1\\'")
-                 .replace(/[\n\r]+/g, "")
-                 .replace(/ {2,20}/g, " ");
-            };
-
             var extractScript = function(text) {
                var start = text.indexOf("<script>");
                var end = text.indexOf("</script>");
@@ -88,7 +115,7 @@ define("vue", ["_cssparser"], function(cssParser) {
             };
             
             var parse = function(text) {
-               var template = extractTemplate(text);
+               var template = templateParser.extractTemplate(text);
                var source = extractScript(text);
                if(!config.isBuild) {
                    cssParser.parse(text);
@@ -123,16 +150,9 @@ define("vue", ["_cssparser"], function(cssParser) {
                 };
             }
 
-            var createScript = function(script, callback) {
-                var s = document.createElement( 'script' );
-                s.setAttribute( 'innerHTML', script);
-                s.onload = callback;
-                document.body.appendChild( s );
-            };
-
             req([], function() {
                 loadRemote(url, function(text){
-					onload.fromText(text);
+                    onload.fromText(text);
                 });
             });
         }
@@ -140,7 +160,12 @@ define("vue", ["_cssparser"], function(cssParser) {
 });
 /* vim: set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab : */
 ;
-/*global define, require, module, XMLHttpRequest, document */
+/*global define */
+
+/* jshint ignore:start */
+
+/* jshint ignore:end */
+
 define("require-vuejs", ["vue"], function(vue){
     return vue;
 });

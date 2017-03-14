@@ -35,23 +35,33 @@ module.exports = function(grunt) {
             banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
           },
           build: {
-            src: 'src/<%= pkg.name %>.js',
+            src: 'app.js',
             dest: 'dist/<%= pkg.name %>.min.js'
           }
         },
         requirejs: {
           compile: {
               options: {
-                  baseUrl: './src',
-                  name: '<%= pkg.name %>', 
+                  baseUrl: './',
+                  name: 'app', 
+								  paths: {
+										"Vue": "node_modules/vue/dist/vue",
+										"vue_": "node_modules/require-vuejs/dist/require-vuejs",
+										"vue": "empty:"
+									},
                   include: [ ],
                   out: './dist/<%= pkg.name %>.min.js'
               }
           }, // compile
           dese: {
               options: {
-                  baseUrl: './src',
-                  name: '<%= pkg.name %>', 
+                  baseUrl: './',
+                  name: 'app', 
+								  paths: {
+										"Vue": "node_modules/vue/dist/vue",
+										"vue_": "node_modules/require-vuejs/dist/require-vuejs",
+										"vue": "empry:"
+									},
                   include: [ ],
                   optimize: "none",
                   out: './dist/<%= pkg.name %>.js'
@@ -64,5 +74,5 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
 
-    grunt.registerTask('default', ['jshint', 'requirejs:compile', 'requirejs:dese']);
+    grunt.registerTask('default', ['jshint', 'uglify']);
 };

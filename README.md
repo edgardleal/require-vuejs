@@ -2,6 +2,7 @@
 > RequireJS plugin to async and dynamic load and parse .vue components 
 
 [![Build Status](https://travis-ci.org/edgardleal/require-vuejs.svg?branch=master)](https://travis-ci.org/edgardleal/require-vuejs)
+[![Code Climate](https://codeclimate.com/github/edgardleal/require-vuejs/badges/gpa.svg)](https://codeclimate.com/github/edgardleal/require-vuejs)
 
 This library has only 4Kb ( minified ).
 
@@ -30,6 +31,8 @@ For production usage: ( Fast CDN, long age cache and minified )
 
 ## Usage 
 
+This example on [Codepen](http://codepen.io/edgardleal/pen/XMaeNP/)
+
 index.html
 
 
@@ -44,7 +47,6 @@ index.html
                 <my-component></my-component>
         </div>
             <script data-main="app" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.3/require.min.js" ></script>
-            <script src="" ></script>
         </body>
     </html>
 
@@ -77,7 +79,7 @@ Create your app code: ( app.js )
     requirejs.config({
         paths: {
             "Vue": "https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.1/vue.min",
-            "vue": "https://cdn.rawgit.com/edgardleal/require-vuejs/aeaff6db/dist/require-vuejs.min"
+            "vue": "https://rawgit.com/edgardleal/require-vue/master/dist/require-vuejs"
         },
         shim: {
             "Vue": {"exports": "Vue"}
