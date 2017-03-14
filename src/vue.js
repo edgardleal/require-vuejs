@@ -3,7 +3,13 @@
  *
  * Distributed under terms of the MIT license.
  */
-define("vue", ["_cssparser"], function(cssParser) {
+/* jshint ignore:start */
+if (typeof define !== "function") {
+    var define = require("amdefine")(module);
+}
+/* jshint ignore:end */
+
+define("vue", ["css-parser", "template-parser"], function(cssParser, templateParser) {
     return {
         load: function (name, req, onload, config) {
             var url, extension; 
@@ -20,15 +26,6 @@ define("vue", ["_cssparser"], function(cssParser) {
             var sourceHeader = config.isBuild?"" : "//# sourceURL=" + location.origin + url + "\n";
             var functionTemplate = ["(function(template){", "})("];
 
-            var extractTemplate = function(text) {
-               var start = text.indexOf("<template>");
-               var end   = text.indexOf("</template>");
-               return text.substring(start + 10, end)
-                 .replace(/([^\\])'/g, "$1\\'")
-                 .replace(/[\n\r]+/g, "")
-                 .replace(/ {2,20}/g, " ");
-            };
-
             var extractScript = function(text) {
                var start = text.indexOf("<script>");
                var end = text.indexOf("</script>");
@@ -36,7 +33,7 @@ define("vue", ["_cssparser"], function(cssParser) {
             };
             
             var parse = function(text) {
-               var template = extractTemplate(text);
+               var template = templateParser.extractTemplate(text);
                var source = extractScript(text);
                if(!config.isBuild) {
                    cssParser.parse(text);
@@ -70,13 +67,6 @@ define("vue", ["_cssparser"], function(cssParser) {
                     xhttp.send();
                 };
             }
-
-            var createScript = function(script, callback) {
-                var s = document.createElement( 'script' );
-                s.setAttribute( 'innerHTML', script);
-                s.onload = callback;
-                document.body.appendChild( s );
-            };
 
             req([], function() {
                 loadRemote(url, function(text){

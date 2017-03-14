@@ -1,15 +1,10 @@
 {
-  "name": "require-vuejs",
+  "name": "require-vuejs-example-1",
   "version": "1.0.3",
   "description": "A RequireJS plugin to load and parse VueJS components ( .vue ) ",
-  "main": "dist/require-vuejs.js",
-  "directories": {
-    "doc": "docs",
-    "test": "spec"
-  },
-  "scripts": {
-    "test": "node node_modules/jasmine-node/bin/jasmine-node ./spec"
-  },
+  "main": "app.js",
+  "directories": {},
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/edgardleal/require-vuejs.git"
@@ -26,9 +21,9 @@
   },
   "homepage": "https://github.com/edgardleal/require-vuejs#readme",
   "dependencies": {
+    "require-vuejs": "^1.0.3",
     "requirejs": "^2.3.3",
-    "vue": "^2.2.2",
-    "vue-template-compiler": "^2.2.4"
+    "vue": "^2.2.2"
   },
   "devDependencies": {
     "grunt": "^1.0.1",

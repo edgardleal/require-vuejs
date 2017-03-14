@@ -1,4 +1,11 @@
-/*global define, require, module, XMLHttpRequest, document */
+/*global define */
+
+/* jshint ignore:start */
+if (typeof define !== "function") {
+    var define = require("amdefine")(module);
+}
+/* jshint ignore:end */
+
 define("require-vuejs", ["vue"], function(vue){
     return vue;
 });

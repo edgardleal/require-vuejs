@@ -1,13 +1,17 @@
+/*globals: define, require */
 /*
- * css-parse.js
+ * css-parser.js
  *
  * Distributed under terms of the MIT license.
  */
-if (typeof module === "object") {
-    var define = require("requirejs").define;
-}
 
-define("_cssparser", [], function() {
+/* jshint ignore:start */
+if (typeof define !== "function") {
+    var define = require("amdefine")(module);
+}
+/* jshint ignore:end */
+
+define("css-parser", [], function() {
     'use strict';
     var extractCss = function(text) {
         var start = text.indexOf("<style>");
