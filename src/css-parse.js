@@ -9,7 +9,7 @@ if (typeof module === "object") {
 
 define("_cssparser", [], function() {
     'use strict';
-    const extractCss = function(text) {
+    var extractCss = function(text) {
         var start = text.indexOf("<style>");
         var end = text.indexOf("</style>");
 
@@ -20,7 +20,7 @@ define("_cssparser", [], function() {
         }
     };
 
-    const appendCSSStyle = function(css) {
+    var appendCSSStyle = function(css) {
         if(css === false) {
             return;
         } else {
@@ -43,7 +43,7 @@ define("_cssparser", [], function() {
         appendCSSStyle: appendCSSStyle,
 
         parse: function(text) {
-            const css = extractCss(text);
+            var css = extractCss(text);
             appendCSSStyle(css);
         }
     };
