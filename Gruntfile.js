@@ -22,10 +22,10 @@ module.exports = function(grunt) {
                     XMLHttpRequest: true,
                     define: true,
                     describe: true,
-									  beforeEach: true,
+                    beforeEach: true,
                     expect: true,
                     it: true,
-                    require: true,
+                    require: true
                 }
             },
             all: ['Gruntfile.js', 'src/**/*.js', 'spec/**/*.js']

@@ -6,13 +6,20 @@
 
 This library has only 4Kb ( minified ).
 
-## Features
+## What this library can do
 
 * Real time integration 
 * Don't need build to use
 * Used as RequireJS plugin 
 * You can use syntax detection from your IDE
 * Suport for [single file component](https://vuejs.org/v2/guide/single-file-components.html)
+* Work with or without extencion
+* Support .html and .vue files 
+* CSS inside component file
+
+## What this library can't do
+* Parse Jade and other templates 
+* Scoped css 
 
 ## CDN 
 Developent ( last version )
@@ -33,6 +40,14 @@ For production usage: ( Fast CDN, long age cache and minified )
 ## Usage 
 
 This example on [Codepen](http://codepen.io/edgardleal/pen/XMaeNP/)
+
+### File structure
+
+    app.js
+    component.vue
+    index.html
+
+### Source code example
 
 index.html
 
@@ -87,6 +102,8 @@ Create your app code: ( app.js )
         }
     });
     
+	// to use component in your code with RequireJS: 
+	// put a reference to your component file with or without extencion after 'vue!' 
     require(["Vue", "vue!component"], function(Vue){
         var app = new Vue({
             el: "#app"

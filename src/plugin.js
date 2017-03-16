@@ -3,13 +3,16 @@
  *
  * Distributed under terms of the MIT license.
  */
+var dependencies = ["css-parser", "template-parser"];
 /* jshint ignore:start */
 if (typeof define !== "function") {
     var define = require("amdefine")(module);
+    dependencies[0] = __dirnname + "/" + dependencies[0];
+    dependencies[1] = __dirnname + "/" + dependencies[1];
 }
 /* jshint ignore:end */
 
-define("vue", ["css-parser", "template-parser"], function(cssParser, templateParser) {
+define("plugin", dependencies, function(cssParser, templateParser) {
     return {
         load: function (name, req, onload, config) {
             var url, extension; 
@@ -37,7 +40,7 @@ define("vue", ["css-parser", "template-parser"], function(cssParser, templatePar
                var source = extractScript(text);
                if(!config.isBuild) {
                    cssParser.parse(text);
-               } // TODO: Don't optimize css yet 
+               }
 
                return sourceHeader +
                   functionTemplate[0] +
@@ -76,4 +79,4 @@ define("vue", ["css-parser", "template-parser"], function(cssParser, templatePar
         }
     };
 });
-/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab : */
+/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
