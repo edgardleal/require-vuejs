@@ -2,14 +2,25 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        jsmeter: {
+            all: {
+                    files: {
+                        src: ['app.js']
+                    },
+                options: {
+                    dest: 'report/',
+                }
+            }
+        },
         requirejs: {
           compile: {
               options: {
                   baseUrl: './',
+                  mainConfigFile: "app.js",
                   name: 'app', 
                       paths: {
                           "Vue": "node_modules/vue/dist/vue",
-                          "vue": "node_modules/require-vuejs/src/require-vuejs"
+                       //   "vue": "node_modules/require-vuejs/src/require-vuejs"
                       },
                   out: './dist/<%= pkg.name %>.min.js'
               }
@@ -20,7 +31,7 @@ module.exports = function(grunt) {
                   name: 'app', 
                       paths: {
                           "Vue": "node_modules/vue/dist/vue",
-                          "vue": "node_modules/require-vuejs/src/require-vuejs"
+                      //    "vue": "node_modules/require-vuejs/dist/require-vuejs"
                       },
                   include: [ ],
                   optimize: "none",
@@ -31,6 +42,7 @@ module.exports = function(grunt) {
     });
 
     grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-jsmeter');
 
     grunt.registerTask('default', ['requirejs']);
 };

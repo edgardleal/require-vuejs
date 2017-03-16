@@ -8,5 +8,5 @@ var dependencies = ["plugin"];
 define("require-vuejs", dependencies, function(vue){
     return vue;
 });
-/*vim: set ts=4 ex=4 tabshift=4 noexpandtab :*/
+/*vim: set ts=4 ex=4 tabshift=4 expandtab :*/
 ;

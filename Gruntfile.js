@@ -2,6 +2,19 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        jsmeter: {
+            all: {
+                    files: {
+                        src: ['src/plugin.js']
+                    },
+                options: {
+                    dest: 'report/',
+                    files: {
+                        src: ['src/plugin']
+                    }
+                }
+            }
+        },
         jshint: {
             options: {
                 boss: true,
@@ -30,15 +43,6 @@ module.exports = function(grunt) {
             },
             all: ['Gruntfile.js', 'src/**/*.js', 'spec/**/*.js']
         },
-        uglify: {
-          options: {
-            banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
-          },
-          build: {
-            src: 'src/<%= pkg.name %>.js',
-            dest: 'dist/<%= pkg.name %>.min.js'
-          }
-        },
         requirejs: {
           compile: {
               options: {
@@ -61,8 +65,8 @@ module.exports = function(grunt) {
     });
 
     grunt.loadNpmTasks('grunt-contrib-requirejs');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-jsmeter');
 
     grunt.registerTask('default', ['jshint', 'requirejs:compile', 'requirejs:dese']);
 };
