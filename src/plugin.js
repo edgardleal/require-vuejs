@@ -3,7 +3,7 @@
  *
  * Distributed under terms of the MIT license.
  */
-var dependencies = ["css-parser", "template-parser"];
+var dependencies = ["css-parser", "template-parser", "script-parser"];
 /* jshint ignore:start */
 if (typeof define !== "function") {
     var define = require("amdefine")(module);
@@ -12,7 +12,7 @@ if (typeof define !== "function") {
 }
 /* jshint ignore:end */
 
-define("plugin", dependencies, function(cssParser, templateParser) {
+define("plugin", dependencies, function(cssParser, templateParser, scriptParser) {
     return {
         load: function (name, req, onload, config) {
             var url, extension; 
@@ -29,15 +29,9 @@ define("plugin", dependencies, function(cssParser, templateParser) {
             var sourceHeader = config.isBuild?"" : "//# sourceURL=" + location.origin + url + "\n";
             var functionTemplate = ["(function(template){", "})("];
 
-            var extractScript = function(text) {
-               var start = text.indexOf("<script>");
-               var end = text.indexOf("</script>");
-               return text.substring(start + 8, end);
-            };
-            
             var parse = function(text) {
                var template = templateParser.extractTemplate(text);
-               var source = extractScript(text);
+               var source = scriptParser.extractScript(text);
                if(!config.isBuild) {
                    cssParser.parse(text);
                }
@@ -54,7 +48,7 @@ define("plugin", dependencies, function(cssParser, templateParser) {
             if(config.isBuild) {
                 var fs = require('fs');
                 loadRemote = function(url, callback) {
-                    var text = fs.readFileSync().toString();
+                    var text = fs.readFileSync(url).toString();
                     callback(parse(text));
                 };
 
