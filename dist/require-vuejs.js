@@ -1,3 +1,4 @@
+(function() {
 /*globals: define, require */
 /*
  * css-parser.js
@@ -5,9 +6,7 @@
  * Distributed under terms of the MIT license.
  */
 
-/* jshint ignore:start */
 
-/* jshint ignore:end */
 
 define("css-parser", [], function() {
     'use strict';
@@ -50,16 +49,14 @@ define("css-parser", [], function() {
         }
     };
 });
-/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab : */
-;
+/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
+
 /*
  * template-parser.js
  *
  * Distributed under terms of the MIT license.
  */
-/* jshint ignore:start */
 
-/* jshint ignore:end */
 
 define("template-parser", [], function(){
   'use strict';
@@ -80,17 +77,41 @@ define("template-parser", [], function(){
     
 });
 /* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
-;
+
+/*
+ * script-parser.js
+ * Copyright (C) 2017 Edgard Leal
+ *
+ * Distributed under terms of the MIT license.
+ */
+define("script-parser", [], function() {
+  'use strict';
+  return {
+      findCloseTag: function(text, start) {
+          var i = start;
+          while(i < text.length && text[i++] !== ">"){}
+          return i;
+      },
+      extractScript: function(text) {
+          var start = text.indexOf("<script");
+          var sizeOfStartTag = this.findCloseTag(text, start);
+          var end = text.indexOf("</script>");
+          return text.substring(sizeOfStartTag, end);
+      }
+  };
+});
+/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
+
 /*
  * vue.js
  *
  * Distributed under terms of the MIT license.
  */
-/* jshint ignore:start */
+var dependencies = ["css-parser", "template-parser", "script-parser"];
 
-/* jshint ignore:end */
 
-define("vue", ["css-parser", "template-parser"], function(cssParser, templateParser) {
+
+define("plugin", ["css-parser", "template-parser", "script-parser"], function(cssParser, templateParser, scriptParser) {
     return {
         load: function (name, req, onload, config) {
             var url, extension; 
@@ -107,18 +128,12 @@ define("vue", ["css-parser", "template-parser"], function(cssParser, templatePar
             var sourceHeader = config.isBuild?"" : "//# sourceURL=" + location.origin + url + "\n";
             var functionTemplate = ["(function(template){", "})("];
 
-            var extractScript = function(text) {
-               var start = text.indexOf("<script>");
-               var end = text.indexOf("</script>");
-               return text.substring(start + 8, end);
-            };
-            
             var parse = function(text) {
                var template = templateParser.extractTemplate(text);
-               var source = extractScript(text);
+               var source = scriptParser.extractScript(text);
                if(!config.isBuild) {
                    cssParser.parse(text);
-               } // TODO: Don't optimize css yet 
+               }
 
                return sourceHeader +
                   functionTemplate[0] +
@@ -130,9 +145,9 @@ define("vue", ["css-parser", "template-parser"], function(cssParser, templatePar
             var loadRemote;
 
             if(config.isBuild) {
-                var fs = require('fs');
                 loadRemote = function(url, callback) {
-                    var text = fs.readFileSync().toString();
+                    var fs = require("fs");
+                    var text = fs.readFileSync(url).toString();
                     callback(parse(text));
                 };
 
@@ -157,16 +172,29 @@ define("vue", ["css-parser", "template-parser"], function(cssParser, templatePar
         }
     };
 });
-/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab : */
-;
+/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
+
 /*global define */
 
-/* jshint ignore:start */
+var dependencies = ["plugin"];
 
-/* jshint ignore:end */
 
-define("require-vuejs", ["vue"], function(vue){
+
+define('require-vuejs',["plugin"], function(vue){
     return vue;
 });
-/*vim: set ts=4 ex=4 tabshift=4 :*/
-;
+/*vim: set ts=4 ex=4 tabshift=4 expandtab :*/
+
+/**
+ * vue.js
+ * Copyright (C) 2017  
+ *
+ * Distributed under terms of the MIT license.
+ */
+define('vue',["plugin"], function(vue) {
+    'use strict';
+    return vue;
+});
+/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
+
+})();

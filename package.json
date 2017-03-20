@@ -1,6 +1,6 @@
 {
   "name": "require-vuejs",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A RequireJS plugin to load and parse VueJS components ( .vue ) ",
   "main": "dist/require-vuejs.js",
   "directories": {
@@ -37,6 +37,7 @@
     "grunt-contrib-jshint": "^1.1.0",
     "grunt-contrib-requirejs": "^1.0.0",
     "grunt-contrib-uglify": "^2.2.0",
+    "grunt-jsmeter": "^0.3.1",
     "jasmine-node": "^1.14.5"
   }
 }

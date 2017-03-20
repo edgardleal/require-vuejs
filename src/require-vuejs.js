@@ -1,12 +1,13 @@
 /*global define */
 
-/* jshint ignore:start */
+var dependencies = ["plugin"];
+
 if (typeof define !== "function") {
     var define = require("amdefine")(module);
+    dependencies[0] = __dirnname + "/" + dependencies[0];
 }
-/* jshint ignore:end */
 
-define("require-vuejs", ["vue"], function(vue){
+define(["plugin"], function(vue){
     return vue;
 });
-/*vim: set ts=4 ex=4 tabshift=4 :*/
+/*vim: set ts=4 ex=4 tabshift=4 expandtab :*/

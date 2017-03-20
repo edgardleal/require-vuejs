@@ -2,54 +2,26 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        jshint: {
-            options: {
-                boss: true,
-                browser: true,
-                curly: true,
-                eqeqeq: true,
-                eqnull: true,
-                immed: true,
-                latedef: true,
-                newcap: true,
-                noarg: true,
-                node : true,
-                sub: true,
-                undef: true,
-                unused: true,
-
-                globals: {
-                    XMLHttpRequest: true,
-                    define: true,
-                    describe: true,
-									  beforeEach: true,
-                    expect: true,
-                    it: true,
-                    require: true,
+        jsmeter: {
+            all: {
+                    files: {
+                        src: ['app.js']
+                    },
+                options: {
+                    dest: 'report/',
                 }
-            },
-            all: ['Gruntfile.js', 'src/**/*.js', 'spec/**/*.js']
-        },
-        uglify: {
-          options: {
-            banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
-          },
-          build: {
-            src: 'app.js',
-            dest: 'dist/<%= pkg.name %>.min.js'
-          }
+            }
         },
         requirejs: {
           compile: {
               options: {
                   baseUrl: './',
+                  mainConfigFile: "app.js",
                   name: 'app', 
-								  paths: {
-										"Vue": "node_modules/vue/dist/vue",
-										"vue_": "node_modules/require-vuejs/dist/require-vuejs",
-										"vue": "empty:"
-									},
-                  include: [ ],
+                      paths: {
+                          "Vue": "node_modules/vue/dist/vue",
+                       //   "vue": "node_modules/require-vuejs/src/require-vuejs"
+                      },
                   out: './dist/<%= pkg.name %>.min.js'
               }
           }, // compile
@@ -57,11 +29,10 @@ module.exports = function(grunt) {
               options: {
                   baseUrl: './',
                   name: 'app', 
-								  paths: {
-										"Vue": "node_modules/vue/dist/vue",
-										"vue_": "node_modules/require-vuejs/dist/require-vuejs",
-										"vue": "empry:"
-									},
+                      paths: {
+                          "Vue": "node_modules/vue/dist/vue",
+                      //    "vue": "node_modules/require-vuejs/dist/require-vuejs"
+                      },
                   include: [ ],
                   optimize: "none",
                   out: './dist/<%= pkg.name %>.js'
@@ -71,8 +42,7 @@ module.exports = function(grunt) {
     });
 
     grunt.loadNpmTasks('grunt-contrib-requirejs');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-jsmeter');
 
-    grunt.registerTask('default', ['jshint', 'uglify']);
+    grunt.registerTask('default', ['requirejs']);
 };

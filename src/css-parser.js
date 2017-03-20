@@ -5,11 +5,9 @@
  * Distributed under terms of the MIT license.
  */
 
-/* jshint ignore:start */
 if (typeof define !== "function") {
     var define = require("amdefine")(module);
 }
-/* jshint ignore:end */
 
 define("css-parser", [], function() {
     'use strict';
@@ -52,4 +50,4 @@ define("css-parser", [], function() {
         }
     };
 });
-/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab : */
+/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
