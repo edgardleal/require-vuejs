@@ -4,15 +4,14 @@
  * Distributed under terms of the MIT license.
  */
 var dependencies = ["css-parser", "template-parser", "script-parser"];
-/* jshint ignore:start */
+
 if (typeof define !== "function") {
     var define = require("amdefine")(module);
     dependencies[0] = __dirnname + "/" + dependencies[0];
     dependencies[1] = __dirnname + "/" + dependencies[1];
 }
-/* jshint ignore:end */
 
-define("plugin", dependencies, function(cssParser, templateParser, scriptParser) {
+define("plugin", ["css-parser", "template-parser", "script-parser"], function(cssParser, templateParser, scriptParser) {
     return {
         load: function (name, req, onload, config) {
             var url, extension; 
@@ -46,8 +45,8 @@ define("plugin", dependencies, function(cssParser, templateParser, scriptParser)
             var loadRemote;
 
             if(config.isBuild) {
-                var fs = require('fs');
                 loadRemote = function(url, callback) {
+                    var fs = require("fs");
                     var text = fs.readFileSync(url).toString();
                     callback(parse(text));
                 };

@@ -34,6 +34,7 @@ module.exports = function(grunt) {
                 globals: {
                     XMLHttpRequest: true,
                     define: true,
+                    jasmine: true,
                     describe: true,
                     beforeEach: true,
                     expect: true,
@@ -48,15 +49,36 @@ module.exports = function(grunt) {
               options: {
                   baseUrl: './src',
                   name: '<%= pkg.name %>', 
-                  include: [ ],
+                  findNestedDependencies: true,
+                  skipModuleInsertion: true,
+                  logLevel: 0,
+                  skipSemiColonInsertion: true,
+                  wrap: true,
+                  include: [
+                      "vue"
+                  ],
                   out: './dist/<%= pkg.name %>.min.js'
               }
           }, // compile
           dese: {
               options: {
                   baseUrl: './src',
+                  useStrict: true,
                   name: '<%= pkg.name %>', 
-                  include: [ ],
+                  findNestedDependencies: true,
+                  // Avoid inserting define() placeholder
+                  skipModuleInsertion: true,
+                  logLevel: 0,
+
+                  // Avoid breaking semicolons inserted by r.js
+                  skipSemiColonInsertion: true,
+                  wrap: {
+                      start: "(function() {",
+                      end: "})();"
+                  },
+                  include: [
+                      "vue"
+                  ],
                   optimize: "none",
                   out: './dist/<%= pkg.name %>.js'
               }

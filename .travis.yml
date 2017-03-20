@@ -6,7 +6,9 @@ env:
 
 before_install:
     - "npm install -g grunt"
+    - "npm install -g istanbul"
     - npm install
 script: 
     - grunt
     - npm test
+    - istanbul cover node_modules/jasmine-node/bin/jasmine-node spec/

@@ -9,7 +9,7 @@ define("script-parser", [], function() {
   return {
       findCloseTag: function(text, start) {
           var i = start;
-          while(i < text.length && text[i++] !== ">");
+          while(i < text.length && text[i++] !== ">"){}
           return i;
       },
       extractScript: function(text) {

@@ -1,4 +1,4 @@
-/*
+/**
  * pluginSpec.js
  * Copyright (C) 2017 eleal 
  *

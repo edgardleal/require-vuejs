@@ -4,3 +4,4 @@ _SpecRunner.html
 examples/dist/
 *~
 coverage
+*.swp
