@@ -13,21 +13,19 @@ requirejs.config({
 });
 
 describe("Setup", function() {
-'use strict';
+
     it("require", function() {
         expect(require).not.toBe(null);
-        var css = requirejs("css-parser");
+        var css = requirejs("css_parser");
         expect(css).not.toBe(null);
         expect(requirejs("vue")).not.toBe(null);
     });
+
 });
 
 describe("Parser Templates", function() {
-    var parser = requirejs("template-parser");
+    var parser = requirejs("template_parser");
 
-    beforeEach(function() {
-
-    });
 
     it("Simple br", function() {
         var template = "<templete>" +

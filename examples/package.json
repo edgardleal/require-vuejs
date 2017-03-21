@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/edgardleal/require-vuejs#readme",
   "dependencies": {
-    "require-vuejs": "^1.0.3",
+    "require-vuejs": "^1.0.4",
     "requirejs": "^2.3.3",
     "vue": "^2.2.2"
   },

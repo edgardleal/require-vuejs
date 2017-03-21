@@ -5,12 +5,13 @@
  * Distributed under terms of the MIT license.
  */
 
+/* jshint ignore:start */
 if (typeof define !== "function") {
     var define = require("amdefine")(module);
 }
+/* jshint ignore:end */
 
 define("css-parser", [], function() {
-    'use strict';
     var extractCss = function(text) {
         var start = text.indexOf("<style>");
         var end = text.indexOf("</style>");
