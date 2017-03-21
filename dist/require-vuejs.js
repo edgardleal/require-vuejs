@@ -6,10 +6,11 @@
  * Distributed under terms of the MIT license.
  */
 
+/* jshint ignore:start */
 
+/* jshint ignore:end */
 
-define("css-parser", [], function() {
-    'use strict';
+var css_parser = (function(){
     var extractCss = function(text) {
         var start = text.indexOf("<style>");
         var end = text.indexOf("</style>");
@@ -48,18 +49,18 @@ define("css-parser", [], function() {
             appendCSSStyle(css);
         }
     };
-});
-/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
+})();
 
 /*
  * template-parser.js
  *
  * Distributed under terms of the MIT license.
  */
+/* jshint ignore:start */
 
+/* jshint ignore:end */
 
-define("template-parser", [], function(){
-  'use strict';
+var template_parser = (function(){
   
     var extractTemplate = function(text) {
        var start = text.indexOf("<template>");
@@ -75,8 +76,7 @@ define("template-parser", [], function(){
         extractTemplate: extractTemplate
     };
     
-});
-/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
+})();
 
 /*
  * script-parser.js
@@ -84,8 +84,12 @@ define("template-parser", [], function(){
  *
  * Distributed under terms of the MIT license.
  */
-define("script-parser", [], function() {
-  'use strict';
+
+/* jshint ignore:start */
+
+/* jshint ignore:end */
+
+var script_parser = (function(){
   return {
       findCloseTag: function(text, start) {
           var i = start;
@@ -99,20 +103,51 @@ define("script-parser", [], function() {
           return text.substring(sizeOfStartTag, end);
       }
   };
-});
-/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
+})();
 
 /*
  * vue.js
  *
  * Distributed under terms of the MIT license.
  */
-var dependencies = ["css-parser", "template-parser", "script-parser"];
 
+/* jshint ignore:start */
 
+/* jshint ignore:end */
 
-define("plugin", ["css-parser", "template-parser", "script-parser"], function(cssParser, templateParser, scriptParser) {
+var plugin = (function(){
+
+    var modulesLoaded = {};
+
+    var functionTemplate = ["(function(template){", "})("];
+
+    var parse = function(text) {
+       var template = template_parser.extractTemplate(text);
+       var source = script_parser.extractScript(text);
+       if(typeof document !== "undefined") {
+           css_parser.parse(text);
+       }
+
+       return functionTemplate[0] +
+          source +
+          functionTemplate[1] +
+          "'" + template + "');";
+    };
+
+    var loadLocal = function(url, name) {
+        var fs = require.nodeRequire("fs");
+        var text = fs.readFileSync(url, "utf-8");
+        if(text[0] === '\uFEFF') { // remove BOM ( Byte Mark Order ) from utf8 files 
+            text = text.substring(1);
+        }
+        var parsed = parse(text).replace(/(define\()\s*(\[.*)/, "$1\"vue!" + name + "\", $2");
+        return parsed;
+    };
+
     return {
+        write: function(pluginName, moduleName, write) {
+            write.asModule(pluginName + "!" + moduleName, modulesLoaded[moduleName]);
+        },
         load: function (name, req, onload, config) {
             var url, extension; 
 
@@ -126,31 +161,25 @@ define("plugin", ["css-parser", "template-parser", "script-parser"], function(cs
             url = req.toUrl(name + extension);
 
             var sourceHeader = config.isBuild?"" : "//# sourceURL=" + location.origin + url + "\n";
-            var functionTemplate = ["(function(template){", "})("];
-
-            var parse = function(text) {
-               var template = templateParser.extractTemplate(text);
-               var source = scriptParser.extractScript(text);
-               if(!config.isBuild) {
-                   cssParser.parse(text);
-               }
-
-               return sourceHeader +
-                  functionTemplate[0] +
-                  source +
-                  functionTemplate[1] +
-                  "'" + template + "');";
-            };
-
             var loadRemote;
 
             if(config.isBuild) {
                 loadRemote = function(url, callback) {
-                    var fs = require("fs");
-                    var text = fs.readFileSync(url).toString();
-                    callback(parse(text));
+                    return new Promise(function(resolve, reject) {
+                        try {
+                            var fs = require.nodeRequire("fs");
+                            var text = fs.readFileSync(url, "utf-8").toString();
+                            if(text[0] === '\uFEFF') { // remove BOM ( Byte Mark Order ) from utf8 files 
+                                text = text.substring(1);
+                            }
+                            var parsed = parse(text).replace(/(define\()\s*(\[.*)/, "$1\"" + name + "\", $2");
+                            callback(parsed);
+                            resolve(parsed);
+                        } catch(error) {
+                            reject(error);
+                        }
+                    });
                 };
-
             } else {
                 loadRemote = function(path, callback) {
                     var xhttp = new XMLHttpRequest();
@@ -165,23 +194,29 @@ define("plugin", ["css-parser", "template-parser", "script-parser"], function(cs
             }
 
             req([], function() {
-                loadRemote(url, function(text){
-                    onload.fromText(text);
-                });
+                if(config.isBuild) {
+                    var data = loadLocal(url, name);
+                    modulesLoaded[name] = data;
+                    onload.fromText(data);
+                } else {
+                    loadRemote(url, function(text){
+                        modulesLoaded[name] = sourceHeader + text;
+                        onload.fromText(text);
+                    });
+                }
             });
         }
     };
-});
-/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
+})();
 
 /*global define */
 
-var dependencies = ["plugin"];
+/* jshint ignore:start */
 
+/* jshint ignore:end */
 
-
-define('require-vuejs',["plugin"], function(vue){
-    return vue;
+define('require-vuejs', function(){
+    return plugin;
 });
 /*vim: set ts=4 ex=4 tabshift=4 expandtab :*/
 
@@ -191,9 +226,12 @@ define('require-vuejs',["plugin"], function(vue){
  *
  * Distributed under terms of the MIT license.
  */
-define('vue',["plugin"], function(vue) {
-    'use strict';
-    return vue;
+/* jshint ignore:start */
+
+/* jshint ignore:end */
+
+define("vue", function(){
+    return plugin;
 });
 /* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
 

@@ -3,12 +3,13 @@
  *
  * Distributed under terms of the MIT license.
  */
+/* jshint ignore:start */
 if (typeof define !== "function") {
     var define = require("amdefine")(module);
 }
+/* jshint ignore:end */
 
-define("template-parser", [], function(){
-  'use strict';
+define([], function(){
   
     var extractTemplate = function(text) {
        var start = text.indexOf("<template>");

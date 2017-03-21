@@ -1,5 +1,17 @@
 module.exports = function(grunt) {
 
+    var endDefine = /}\);[\n\r\s]*\/\*[^\*]*\*\//g;
+    var rDefineSubmodule = /define\(["'][^rv].*/;
+    function convertAmd(name, path, contents) {
+        if(rDefineSubmodule.exec(contents)) {
+            return contents
+                    .replace(rDefineSubmodule, "var " + name + " = (function(){")
+                    .replace(endDefine, "})();");
+        } else {
+            return contents.replace(/define\((["'][^'"]+['"])\s*,.*/, "define($1, function(){");
+        }
+    }
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         jsmeter: {
@@ -36,6 +48,7 @@ module.exports = function(grunt) {
                     define: true,
                     jasmine: true,
                     describe: true,
+                    Promise: true,
                     beforeEach: true,
                     expect: true,
                     it: true,
@@ -48,16 +61,16 @@ module.exports = function(grunt) {
           compile: {
               options: {
                   baseUrl: './src',
-                  name: '<%= pkg.name %>', 
                   findNestedDependencies: true,
-                  skipModuleInsertion: true,
                   logLevel: 0,
+                  name: '<%= pkg.name %>', 
+                  include: ["vue"], // needed to ensure that workds without need define paths 
+                  onBuildWrite: convertAmd,
+                  optimize: "uglify",
+                  out: './dist/<%= pkg.name %>.min.js',
+                  skipModuleInsertion: true,
                   skipSemiColonInsertion: true,
-                  wrap: true,
-                  include: [
-                      "vue"
-                  ],
-                  out: './dist/<%= pkg.name %>.min.js'
+                  wrap: true
               }
           }, // compile
           dese: {
@@ -69,17 +82,15 @@ module.exports = function(grunt) {
                   // Avoid inserting define() placeholder
                   skipModuleInsertion: true,
                   logLevel: 0,
-
                   // Avoid breaking semicolons inserted by r.js
                   skipSemiColonInsertion: true,
+                  include: ["vue"], // needed to ensure that workds without need define paths 
                   wrap: {
                       start: "(function() {",
                       end: "})();"
                   },
-                  include: [
-                      "vue"
-                  ],
                   optimize: "none",
+                  onBuildWrite: convertAmd,
                   out: './dist/<%= pkg.name %>.js'
               }
           } // dese

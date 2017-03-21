@@ -16,12 +16,15 @@ module.exports = function(grunt) {
           compile: {
               options: {
                   baseUrl: './',
-                  mainConfigFile: "app.js",
+                  logLevel: 0,
+                  findNestedDependencies: true,
+                  'normalizeDirDefines': 'skip',
+                  'skipDirOptimize': true,
                   name: 'app', 
-                      paths: {
-                          "Vue": "node_modules/vue/dist/vue",
-                       //   "vue": "node_modules/require-vuejs/src/require-vuejs"
-                      },
+                  paths: {
+                      "Vue": "node_modules/vue/dist/vue",
+                      "vue": "node_modules/require-vuejs/dist/require-vuejs"
+                  },
                   out: './dist/<%= pkg.name %>.min.js'
               }
           }, // compile
@@ -29,11 +32,10 @@ module.exports = function(grunt) {
               options: {
                   baseUrl: './',
                   name: 'app', 
-                      paths: {
-                          "Vue": "node_modules/vue/dist/vue",
-                      //    "vue": "node_modules/require-vuejs/dist/require-vuejs"
-                      },
-                  include: [ ],
+                  paths: {
+                      "Vue": "node_modules/vue/dist/vue",
+                      "vue": "node_modules/require-vuejs/dist/require-vuejs"
+                  },
                   optimize: "none",
                   out: './dist/<%= pkg.name %>.js'
               }

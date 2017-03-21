@@ -4,8 +4,14 @@
  *
  * Distributed under terms of the MIT license.
  */
-define("script-parser", [], function() {
-  'use strict';
+
+/* jshint ignore:start */
+if (typeof define !== "function") {
+    var define = require("amdefine")(module);
+}
+/* jshint ignore:end */
+
+define("script_parser", [], function() {
   return {
       findCloseTag: function(text, start) {
           var i = start;

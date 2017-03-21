@@ -1,6 +1,6 @@
 {
   "name": "require-vuejs",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A RequireJS plugin to load and parse VueJS components ( .vue ) ",
   "main": "dist/require-vuejs.js",
   "directories": {

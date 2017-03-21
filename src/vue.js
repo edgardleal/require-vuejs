@@ -4,8 +4,13 @@
  *
  * Distributed under terms of the MIT license.
  */
-define(["plugin"], function(vue) {
-    'use strict';
-    return vue;
+/* jshint ignore:start */
+if (typeof define !== "function") {
+    var define = require("amdefine")(module);
+}
+/* jshint ignore:end */
+
+define("vue", "plugin", function(plugin) {
+    return plugin;
 });
 /* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */

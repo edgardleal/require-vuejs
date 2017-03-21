@@ -14,7 +14,7 @@ var plugin = requirejs("plugin");
 
 var componentScript = 
 '(function(template){\n' +
-'    define(["Vue"], function(Vue) {\n' +
+'    define("vue!component", ["Vue"], function(Vue) {\n' +
 '		Vue.component("my-component", {\n' +
 '			template: template,\n' +
 '			data: function() {\n' +

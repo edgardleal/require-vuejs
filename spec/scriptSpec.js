@@ -10,7 +10,8 @@ requirejs.config({
     baseUrl: __dirname + "/../src/",
     nodeRequire: require
 });
-var parser = requirejs("script-parser");
+
+var parser = requirejs("script_parser");
 
 describe("Script parser", function() {
 'use strict';
