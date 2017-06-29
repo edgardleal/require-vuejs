@@ -11,7 +11,7 @@ if (typeof define !== "function") {
 }
 /* jshint ignore:end */
 
-define("css-parser", [], function() {
+define("css_parser", [], function() {
     var extractCss = function(text) {
         var start = text.indexOf("<style>");
         var end = text.indexOf("</style>");
@@ -28,7 +28,7 @@ define("css-parser", [], function() {
             return;
         } else {
             var style = document.createElement("style");
-            var head = document.head || document.getElementsByTagName('head')[0];
+            var head = document.head || document.getElementsByTagName("head")[0];
 
             style.type = "text/css";
             if (style.styleSheet){

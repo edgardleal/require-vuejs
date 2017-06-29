@@ -1,22 +1,22 @@
 <template>
-	<div>{{text}}</div>
+    <div>{{text}}</div>
 </template>
 
 <script>
     define(["Vue"], function(Vue) {
-		Vue.component("my-component", {
-			template: template,
-			data: function() {
-				return {"text": "Ok"};
-			}
-		});
+        Vue.component("my-component", {
+            template: template,
+            data: function() {
+                return {"text": "Ok from component.vue"};
+            }
+        });
     });
 </script>
 
 <style>
 
 div {
-	border: 1px solid;
+    border: 1px solid;
 }
 
 </style>

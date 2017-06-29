@@ -1,5 +1,3 @@
-/*global define */
-
 /* jshint ignore:start */
 if (typeof define !== "function") {
     var define = require("amdefine")(module);

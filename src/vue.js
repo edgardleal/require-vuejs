@@ -10,7 +10,7 @@ if (typeof define !== "function") {
 }
 /* jshint ignore:end */
 
-define("vue", "plugin", function(plugin) {
+define("vue", ["plugin"], function(plugin) {
     return plugin;
 });
 /* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
