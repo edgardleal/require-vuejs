@@ -21,5 +21,11 @@ module.exports = {
             "error",
             "always"
         ]
-    }
+    },
+    "overrides": [
+      {
+        "files": [ "src/*.js", "example/*.js" ],
+        "excludedFiles": ["dist/*.js", "example/require-vuejs.js"],
+      }
+    ]    
 };
