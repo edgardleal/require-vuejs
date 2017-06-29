@@ -41,6 +41,9 @@ define(["css_parser", "template_parser", "script_parser"], function(css_parser, 
     };
 
     return {
+        normalize: function(name) {
+            return name;
+        },
         write: function(pluginName, moduleName, write) {
             write.asModule(pluginName + "!" + moduleName, modulesLoaded[moduleName]);
         },
@@ -97,7 +100,7 @@ define(["css_parser", "template_parser", "script_parser"], function(css_parser, 
                 } else {
                     loadRemote(url, function(text){
                         modulesLoaded[name] = sourceHeader + text;
-                        onload.fromText(text);
+                        onload.fromText(modulesLoaded[name]);
                     });
                 }
             });

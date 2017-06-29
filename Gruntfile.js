@@ -41,7 +41,7 @@ module.exports = function(grunt) {
                     logLevel: 0,
                     name: "<%= pkg.name %>", 
                     include: ["vue"], // needed to ensure that workds without need define paths 
-                    onBuildWrite: convertAmd,
+                    // onBuildWrite: convertAmd,
                     optimize: "uglify",
                     out: "./dist/<%= pkg.name %>.min.js",
                     skipModuleInsertion: true,
@@ -66,7 +66,7 @@ module.exports = function(grunt) {
                         end: "})();"
                     },
                     optimize: "none",
-                    onBuildWrite: convertAmd,
+                    // onBuildWrite: convertAmd,
                     out: "./dist/<%= pkg.name %>.js"
                 }
             } // dese

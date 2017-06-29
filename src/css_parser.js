@@ -11,7 +11,7 @@ if (typeof define !== "function") {
 }
 /* jshint ignore:end */
 
-define("css-parser", [], function() {
+define("css_parser", [], function() {
     var extractCss = function(text) {
         var start = text.indexOf("<style>");
         var end = text.indexOf("</style>");
