@@ -8,7 +8,7 @@
 requirejs.config({
     paths: {
         "Vue": "https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.1/vue",
-        "vue": ["require-vuejs", "https://rawgit.com/edgardleal/require-vuejs/master/dist/require-vuejs"]
+        "vue": ["require-vuejs.min", "https://rawgit.com/edgardleal/require-vuejs/master/dist/require-vuejs"]
     },
     shim: {
         "Vue": {"exports": "Vue"}
