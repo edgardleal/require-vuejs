@@ -1,13 +1,13 @@
 language: node_js
 node_js:
-  - "0.12"
+  - "6.11.0"
 env:
     - ENVIRONMENT=prod
 
 before_install:
     - "npm install -g grunt"
     - "npm install -g istanbul"
-    - "npm install -g eslint"
+    - "npm install -g eslint@4.0.0"
     - npm install
 script: 
     - grunt
