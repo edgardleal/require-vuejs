@@ -7,6 +7,7 @@ env:
 before_install:
     - "npm install -g grunt"
     - "npm install -g istanbul"
+    - "npm install -g eslint"
     - npm install
 script: 
     - grunt
