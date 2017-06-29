@@ -4,6 +4,7 @@
  *
  * Distributed under terms of the MIT license.
  */
+/* global describe, it, expect, jasmine */
 var requirejs = require("requirejs");
 
 requirejs.config({
@@ -13,17 +14,16 @@ requirejs.config({
 var plugin = requirejs("plugin");
 
 var componentScript = 
-'(function(template){\n' +
-'    define("vue!component", ["Vue"], function(Vue) {\n' +
-'		Vue.component("my-component", {\n' +
-'			template: template,\n' +
-'			data: function() {\n' +
-'				return {"text": "Ok"};\n' +
-'			}\n' +
-'		});\n' +
-'    });\n' +
-'})(\'	<div>{{text}}</div>\');';
-
+"(function(template){" + 
+"    define(\"vue!component\", [\"Vue\"], function(Vue) {" + 
+"        Vue.component(\"my-component\", {" + 
+"            template: template," + 
+"            data: function() {" + 
+"                return {\"text\": \"Ok from component.vue\"};" + 
+"            }" + 
+"        });" + 
+"    });" + 
+"})(' <div>{{text}}</div>');";
 
 describe("Script with attributes", function() {
 
@@ -35,10 +35,11 @@ describe("Script with attributes", function() {
     it("Callback", function() {
         var donefn = jasmine.createSpy("success");
 
+        var todo = "todo";
         var onload = {
             // fromText: donefn
             fromText: function(text) {
-                donefn(text);
+                donefn(text.replace(/(\r\n|\r|\n)/gm, ""));
             }
         };
 
