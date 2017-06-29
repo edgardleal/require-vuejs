@@ -4,6 +4,7 @@
  * Distributed under terms of the MIT license.
  */
 
+/* global Promise */
 /* jshint ignore:start */
 if (typeof define !== "function") {
     var define = require("amdefine")(module);
@@ -17,13 +18,13 @@ define(["css_parser", "template_parser", "script_parser"], function(css_parser, 
     var functionTemplate = ["(function(template){", "})("];
 
     var parse = function(text) {
-       var template = template_parser.extractTemplate(text);
-       var source = script_parser.extractScript(text);
-       if(typeof document !== "undefined") {
-           css_parser.parse(text);
-       }
-
-       return functionTemplate[0] +
+        var template = template_parser.extractTemplate(text);
+        var source = script_parser.extractScript(text);
+        if(typeof document !== "undefined") {
+            css_parser.parse(text);
+        }
+ 
+        return functionTemplate[0] +
           source +
           functionTemplate[1] +
           "'" + template + "');";
@@ -32,7 +33,7 @@ define(["css_parser", "template_parser", "script_parser"], function(css_parser, 
     var loadLocal = function(url, name) {
         var fs = require.nodeRequire("fs");
         var text = fs.readFileSync(url, "utf-8");
-        if(text[0] === '\uFEFF') { // remove BOM ( Byte Mark Order ) from utf8 files 
+        if(text[0] === "\uFEFF") { // remove BOM ( Byte Mark Order ) from utf8 files 
             text = text.substring(1);
         }
         var parsed = parse(text).replace(/(define\()\s*(\[.*)/, "$1\"vue!" + name + "\", $2");
@@ -64,7 +65,7 @@ define(["css_parser", "template_parser", "script_parser"], function(css_parser, 
                         try {
                             var fs = require.nodeRequire("fs");
                             var text = fs.readFileSync(url, "utf-8").toString();
-                            if(text[0] === '\uFEFF') { // remove BOM ( Byte Mark Order ) from utf8 files 
+                            if(text[0] === "\uFEFF") { // remove BOM ( Byte Mark Order ) from utf8 files 
                                 text = text.substring(1);
                             }
                             var parsed = parse(text).replace(/(define\()\s*(\[.*)/, "$1\"" + name + "\", $2");

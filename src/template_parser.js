@@ -12,12 +12,12 @@ if (typeof define !== "function") {
 define([], function(){
   
     var extractTemplate = function(text) {
-       var start = text.indexOf("<template>");
-       var end   = text.indexOf("</template>");
-       return text.substring(start + 10, end)
-         .replace(/([^\\])'/g, "$1\\'")
-         .replace(/[\n\r]+/g, "")
-         .replace(/ {2,20}/g, " ");
+        var start = text.indexOf("<template>");
+        var end   = text.indexOf("</template>");
+        return text.substring(start + 10, end)
+            .replace(/([^\\])'/g, "$1\\'")
+            .replace(/[\n\r]+/g, "")
+            .replace(/ {2,20}/g, " ");
     };
 
 

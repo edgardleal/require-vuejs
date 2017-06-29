@@ -28,7 +28,7 @@ define("css-parser", [], function() {
             return;
         } else {
             var style = document.createElement("style");
-            var head = document.head || document.getElementsByTagName('head')[0];
+            var head = document.head || document.getElementsByTagName("head")[0];
 
             style.type = "text/css";
             if (style.styleSheet){

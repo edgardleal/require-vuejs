@@ -27,7 +27,7 @@ var css_parser = (function(){
             return;
         } else {
             var style = document.createElement("style");
-            var head = document.head || document.getElementsByTagName('head')[0];
+            var head = document.head || document.getElementsByTagName("head")[0];
 
             style.type = "text/css";
             if (style.styleSheet){
@@ -60,15 +60,15 @@ var css_parser = (function(){
 
 /* jshint ignore:end */
 
-var template_parser = (function(){
+define('template_parser',[], function(){
   
     var extractTemplate = function(text) {
-       var start = text.indexOf("<template>");
-       var end   = text.indexOf("</template>");
-       return text.substring(start + 10, end)
-         .replace(/([^\\])'/g, "$1\\'")
-         .replace(/[\n\r]+/g, "")
-         .replace(/ {2,20}/g, " ");
+        var start = text.indexOf("<template>");
+        var end   = text.indexOf("</template>");
+        return text.substring(start + 10, end)
+            .replace(/([^\\])'/g, "$1\\'")
+            .replace(/[\n\r]+/g, "")
+            .replace(/ {2,20}/g, " ");
     };
 
 
@@ -76,7 +76,8 @@ var template_parser = (function(){
         extractTemplate: extractTemplate
     };
     
-})();
+});
+/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
 
 /*
  * script-parser.js
@@ -90,19 +91,19 @@ var template_parser = (function(){
 /* jshint ignore:end */
 
 var script_parser = (function(){
-  return {
-      findCloseTag: function(text, start) {
-          var i = start;
-          while(i < text.length && text[i++] !== ">"){}
-          return i;
-      },
-      extractScript: function(text) {
-          var start = text.indexOf("<script");
-          var sizeOfStartTag = this.findCloseTag(text, start);
-          var end = text.indexOf("</script>");
-          return text.substring(sizeOfStartTag, end);
-      }
-  };
+    return {
+        findCloseTag: function(text, start) {
+            var i = start;
+            while(i < text.length && text[i++] !== ">");
+            return i;
+        },
+        extractScript: function(text) {
+            var start = text.indexOf("<script");
+            var sizeOfStartTag = this.findCloseTag(text, start);
+            var end = text.indexOf("</script>");
+            return text.substring(sizeOfStartTag, end);
+        }
+    };
 })();
 
 /*
@@ -111,24 +112,25 @@ var script_parser = (function(){
  * Distributed under terms of the MIT license.
  */
 
+/* global Promise */
 /* jshint ignore:start */
 
 /* jshint ignore:end */
 
-var plugin = (function(){
+define('plugin',["css_parser", "template_parser", "script_parser"], function(css_parser, template_parser, script_parser) {
 
     var modulesLoaded = {};
 
     var functionTemplate = ["(function(template){", "})("];
 
     var parse = function(text) {
-       var template = template_parser.extractTemplate(text);
-       var source = script_parser.extractScript(text);
-       if(typeof document !== "undefined") {
-           css_parser.parse(text);
-       }
-
-       return functionTemplate[0] +
+        var template = template_parser.extractTemplate(text);
+        var source = script_parser.extractScript(text);
+        if(typeof document !== "undefined") {
+            css_parser.parse(text);
+        }
+ 
+        return functionTemplate[0] +
           source +
           functionTemplate[1] +
           "'" + template + "');";
@@ -137,7 +139,7 @@ var plugin = (function(){
     var loadLocal = function(url, name) {
         var fs = require.nodeRequire("fs");
         var text = fs.readFileSync(url, "utf-8");
-        if(text[0] === '\uFEFF') { // remove BOM ( Byte Mark Order ) from utf8 files 
+        if(text[0] === "\uFEFF") { // remove BOM ( Byte Mark Order ) from utf8 files 
             text = text.substring(1);
         }
         var parsed = parse(text).replace(/(define\()\s*(\[.*)/, "$1\"vue!" + name + "\", $2");
@@ -169,7 +171,7 @@ var plugin = (function(){
                         try {
                             var fs = require.nodeRequire("fs");
                             var text = fs.readFileSync(url, "utf-8").toString();
-                            if(text[0] === '\uFEFF') { // remove BOM ( Byte Mark Order ) from utf8 files 
+                            if(text[0] === "\uFEFF") { // remove BOM ( Byte Mark Order ) from utf8 files 
                                 text = text.substring(1);
                             }
                             var parsed = parse(text).replace(/(define\()\s*(\[.*)/, "$1\"" + name + "\", $2");
@@ -207,15 +209,14 @@ var plugin = (function(){
             });
         }
     };
-})();
-
-/*global define */
+});
+/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
 
 /* jshint ignore:start */
 
 /* jshint ignore:end */
 
-define('require-vuejs', function(){
+define('require-vuejs',["plugin"], function(plugin){
     return plugin;
 });
 /*vim: set ts=4 ex=4 tabshift=4 expandtab :*/
