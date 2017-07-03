@@ -4,6 +4,7 @@
  *
  * Distributed under terms of the MIT license.
  */
+/* global describe, it, expect */
 var requirejs = require("requirejs");
 
 requirejs.config({
@@ -14,7 +15,7 @@ requirejs.config({
 var parser = requirejs("script_parser");
 
 describe("Script parser", function() {
-'use strict';
+    "use strict";
     it("Extract simple", function() {
         var template = "<script>alert('ok')</script>";
         var result = parser.extractScript(template);

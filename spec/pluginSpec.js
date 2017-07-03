@@ -35,7 +35,6 @@ describe("Script with attributes", function() {
     it("Callback", function() {
         var donefn = jasmine.createSpy("success");
 
-        var todo = "todo";
         var onload = {
             // fromText: donefn
             fromText: function(text) {

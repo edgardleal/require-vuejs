@@ -3,6 +3,7 @@
  *
  * Distributed under terms of the MIT license.
  */
+/* global describe, it, expect */
 
 
 var requirejs = require("requirejs");

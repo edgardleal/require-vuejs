@@ -1,17 +1,5 @@
 module.exports = function(grunt) {
 
-    var endDefine = /}\);[\n\r\s]*\/\*[^*]*\*\//g;
-    var rDefineSubmodule = /define\([""][^rv].*/;
-    function convertAmd(name, path, contents) {
-        if(rDefineSubmodule.exec(contents)) {
-            return contents
-                .replace(rDefineSubmodule, "var " + name + " = (function(){")
-                .replace(endDefine, "})();");
-        } else {
-            return contents.replace(/define\(([""][^""]+[""])\s*,.*/, "define($1, function(){");
-        }
-    }
-
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
         jsmeter: {
@@ -31,7 +19,10 @@ module.exports = function(grunt) {
             options: {
                 configFile: ".eslintrc.js"
             },
-            target: ["./src/**/*.js"]
+            target: [
+                "./src/**/*.js",
+                "./spec/**/*.js"
+            ]
         },
         requirejs: {
             compile: {
