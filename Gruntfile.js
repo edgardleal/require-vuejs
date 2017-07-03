@@ -24,6 +24,12 @@ module.exports = function(grunt) {
                 "./spec/**/*.js"
             ]
         },
+        jscpd: {
+            javascript: {
+                path: 'src/',
+                exclude: []
+            }
+        },
         requirejs: {
             compile: {
                 options: {
@@ -67,6 +73,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-requirejs");
     grunt.loadNpmTasks("grunt-jsmeter");
     grunt.loadNpmTasks("grunt-eslint");
+    grunt.loadNpmTasks('grunt-jscpd');
 
-    grunt.registerTask("default", ["eslint", "requirejs:compile", "requirejs:dese"]);
+    grunt.registerTask("default", ["eslint", "jscpd", "requirejs:compile", "requirejs:dese"]);
 };
