@@ -12,8 +12,8 @@ requirejs.config({
     baseUrl: __dirname + "/../src/",
     nodeRequire: require,
     paths: {
-        "Vue": "node_modules/vue/dist/vue.common.js",
-        "vue": "node_modules/vue/dist/vue.common.js",
+        "Vue": "../node_modules/vue/dist/vue.common.js",
+        "vue": "../node_modules/vue/dist/vue.common.js",
     }
 });
 
