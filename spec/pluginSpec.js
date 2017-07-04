@@ -4,41 +4,43 @@
  *
  * Distributed under terms of the MIT license.
  */
-/* global describe, it, expect, jasmine */
+/* global describe, it, expect, jasmine, waitsFor */
 var requirejs = require("requirejs");
+var define = requirejs.define;
 
 requirejs.config({
     baseUrl: __dirname + "/../src/",
-    nodeRequire: require
+    nodeRequire: require,
+    paths: {
+        "Vue": "node_modules/vue/dist/vue.common.js",
+        "vue": "node_modules/vue/dist/vue.common.js",
+    }
 });
-var plugin = requirejs("plugin");
 
-var componentScript = 
-"(function(template){" + 
-"    define(\"vue!component\", [\"Vue\"], function(Vue) {" + 
-"        Vue.component(\"my-component\", {" + 
-"            template: template," + 
-"            data: function() {" + 
-"                return {\"text\": \"Ok from component.vue\"};" + 
-"            }" + 
-"        });" + 
-"    });" + 
-"})(' <div>{{text}}</div>');";
+var plugin   = requirejs("plugin");
+var window   = requirejs("../spec/windowMock");
+var document = requirejs("../spec/documentMock");
+var Vue      = requirejs("Vue");
+requirejs("vue-template-compiler");
 
-describe("Script with attributes", function() {
+describe("Plugin parser and execution", function() {
 
     it("Setup", function() {
-        expect(plugin).not.toBe(null);
-        expect(plugin.load).not.toBe(null);
+        expect(plugin      ).not .toBeNull();
+        expect(plugin.load ).not .toBeNull();
+        expect(define      ).not .toBeNull();
+        expect(window      ).not .toBeNull();
+        expect(Vue.compile ).not .toBeNull();
     });
 
-    it("Callback", function() {
+    it("Parser", function() {
         var donefn = jasmine.createSpy("success");
 
         var onload = {
             // fromText: donefn
             fromText: function(text) {
-                donefn(text.replace(/(\r\n|\r|\n)/gm, ""));
+                eval(text);
+                donefn("ok");
             }
         };
 
@@ -53,10 +55,36 @@ describe("Script with attributes", function() {
 
         plugin.load("component", req, onload, {isBuild: true});
 
+        expect(donefn).toHaveBeenCalledWith("ok");
+    });
 
-        expect(donefn).toHaveBeenCalledWith(componentScript);
+    it("CSS Style setup", function() {
+        expect(document).not.toBeNull();
+        expect(document.head).not.toBeNull();
+        expect(document.head.getElementsByTagName("style").length).toBe(1);
+    });
+
+    it("Structure of component", function() {
+        var donefn = jasmine.createSpy("success");
+
+        // expect(donefn).toHaveBeenCalledWith("ok");
+
+        var component = requirejs("vue!component");
+        component = new component().$mount();
+        
+        expect(component).not.toBeNull();
+        expect(component).not.toBeUndefined();
+
+        Vue.nextTick(function() {
+            expect(component.text).toBe("Ok from component.vue");
+            donefn("ok");
+        });
+
+        waitsFor(function() {
+            return donefn.callCount > 0;
+        }, "vm was mounted", 1000);
+
     });
 
 });
-
 /* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */

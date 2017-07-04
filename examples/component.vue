@@ -4,12 +4,17 @@
 
 <script>
     define(["Vue"], function(Vue) {
-        Vue.component("my-component", {
+        var result = Vue.extend({
             template: template,
             data: function() {
                 return {"text": "Ok from component.vue"};
             }
         });
+
+        Vue.component("my-component", result); // register to be used
+
+        // return to be used in unit tests 
+        return result;
     });
 </script>
 

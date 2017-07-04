@@ -3,7 +3,18 @@ module.exports = {
         "browser": true,
         "node": true
     },
-    "extends": "eslint:recommended",
+    "plugins": [
+        "vue"
+    ],
+    "globals": {
+        "require": true,
+        "requirejs": true,
+        "define": true,
+        "template": true,
+    },
+    "extends": [
+        "eslint:recommended",
+    ],
     "globals": {
         "require": true,
         "define": true
