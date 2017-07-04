@@ -3,7 +3,6 @@
  *
  * Distributed under terms of the MIT license.
  */
-
 /* global Promise */
 /* jshint ignore:start */
 if (typeof define !== "function") {
@@ -12,6 +11,7 @@ if (typeof define !== "function") {
 /* jshint ignore:end */
 
 define(["css_parser", "template_parser", "script_parser"], function(css_parser, template_parser, script_parser) {
+    "use strict";
 
     var modulesLoaded = {};
 
@@ -20,12 +20,11 @@ define(["css_parser", "template_parser", "script_parser"], function(css_parser, 
     var parse = function(text) {
         var template = template_parser.extractTemplate(text);
         var source = script_parser.extractScript(text);
-        if(typeof document !== "undefined") {
-            css_parser.parse(text);
-        }
+        var functionString = css_parser.functionString(text);
  
         return functionTemplate[0] +
-          source +
+         source +
+          functionString +
           functionTemplate[1] +
           "'" + template + "');";
     };

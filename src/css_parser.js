@@ -4,7 +4,6 @@
  *
  * Distributed under terms of the MIT license.
  */
-
 /* jshint ignore:start */
 if (typeof define !== "function") {
     var define = require("amdefine")(module);
@@ -12,6 +11,7 @@ if (typeof define !== "function") {
 /* jshint ignore:end */
 
 define("css_parser", [], function() {
+    "use strict";
     var extractCss = function(text) {
         var start = text.indexOf("<style>");
         var end = text.indexOf("</style>");
@@ -24,9 +24,7 @@ define("css_parser", [], function() {
     };
 
     var appendCSSStyle = function(css) {
-        if(css === false) {
-            return;
-        } else {
+        if(css) {
             var style = document.createElement("style");
             var head = document.head || document.getElementsByTagName("head")[0];
 
@@ -44,7 +42,15 @@ define("css_parser", [], function() {
     return {
         extractCss: extractCss,
         appendCSSStyle: appendCSSStyle,
+        functionString: function(text) {
+            var css = extractCss(text)
+                .replace(/([^\\])'/g, "$1\\'")
+                .replace(/[\n\r]+/g, "")
+                .replace(/ {2,20}/g, " ");
 
+            var result = "(" + appendCSSStyle.toString() + ")('" + css + "');";
+            return result;
+        },
         parse: function(text) {
             var css = extractCss(text);
             appendCSSStyle(css);

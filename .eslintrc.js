@@ -4,6 +4,10 @@ module.exports = {
         "node": true
     },
     "extends": "eslint:recommended",
+    "globals": {
+        "require": true,
+        "define": true
+    },
     "rules": {
         "indent": [
             "error",
@@ -21,11 +25,5 @@ module.exports = {
             "error",
             "always"
         ]
-    },
-    "overrides": [
-      {
-        "files": [ "src/*.js", "example/*.js" ],
-        "excludedFiles": ["dist/*.js", "example/require-vuejs.js"],
-      }
-    ]    
+    }
 };
