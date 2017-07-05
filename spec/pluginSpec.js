@@ -70,7 +70,7 @@ describe("Plugin parser and execution", function() {
         // expect(donefn).toHaveBeenCalledWith("ok");
 
         var component = requirejs("vue!component");
-        component = new component().$mount();
+        component = new component().$mount("body");
         
         expect(component).not.toBeNull();
         expect(component).not.toBeUndefined();

@@ -24,12 +24,6 @@ module.exports = function(grunt) {
                 "./spec/**/*.js"
             ]
         },
-        copy: {
-            files: {
-                src: "dist/require-vuejs.js",
-                dest: "examples/require-vuejs.js"
-            }
-        },
         jscpd: {
             javascript: {
                 path: "src/",
@@ -80,7 +74,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-jsmeter");
     grunt.loadNpmTasks("grunt-eslint");
     grunt.loadNpmTasks("grunt-jscpd");
-    grunt.loadNpmTasks("grunt-contrib-copy");
 
-    grunt.registerTask("default", ["eslint", "jscpd", "requirejs:compile", "requirejs:dese", "copy"]);
+    grunt.registerTask("default", ["eslint", "jscpd", "requirejs:compile", "requirejs:dese"]);
 };
