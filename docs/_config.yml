@@ -1,0 +1,13 @@
+title: require-vuejs
+description: A plugin to integrate Require.js and Vue.js
+show_downloads: true
+google_analytics:
+theme: 
+github:
+  repository_name: require-vuejs
+  owner_name: edgardleal
+  build_revision: 1.0.6
+  repository_url: https://github.com/edgardleal/require-vuejs
+  owner_url: https://github.com/edgardleal  
+  zip_url: https://github.com/edgardleal/require-vuejs/archive/1.0.6.zip  
+  tar_url: https://github.com/edgardleal/require-vuejs/archive/1.0.6.tar.gz 
