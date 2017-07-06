@@ -24,6 +24,13 @@ describe("CSS parser", function() {
 
         expect(expectedIndex).not.toBe(-1);
     });
+
+    it("Without style tag", function() {
+        var template = "<script> define(){} </script> <template> <div/> </template";
+        var result = parser.functionString(template);
+
+        expect(result).toEqual("");
+    });
 });
 
 /* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
