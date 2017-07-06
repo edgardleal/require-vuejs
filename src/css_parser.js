@@ -43,10 +43,15 @@ define("css_parser", [], function() {
         extractCss: extractCss,
         appendCSSStyle: appendCSSStyle,
         functionString: function(text) {
-            var css = extractCss(text)
-                .replace(/([^\\])'/g, "$1\\'")
-                .replace(/[\n\r]+/g, "")
-                .replace(/ {2,20}/g, " ");
+            var css = extractCss(text);
+            if ( css === false ) {
+                return "";
+            } else {
+                css = css
+                    .replace(/([^\\])'/g, "$1\\'")
+                    .replace(/[\n\r]+/g, "")
+                    .replace(/ {2,20}/g, " ");
+            }
 
             var result = "(" + appendCSSStyle.toString() + ")('" + css + "');";
             return result;
