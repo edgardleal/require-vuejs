@@ -61,7 +61,7 @@ describe("Plugin parser and execution", function() {
     it("CSS Style setup", function() {
         expect(document).not.toBeNull();
         expect(document.head).not.toBeNull();
-        expect(document.head.getElementsByTagName("style").length).toBe(1);
+        expect(document.head.getElementsByTagName("style").length).not.toBe(0);
     });
 
     it("Structure of component", function() {
