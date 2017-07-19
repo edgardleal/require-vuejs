@@ -78,7 +78,9 @@ Create your component:  ( component.vue )
 
     <template>
       <div>
+      {% raw %}
           {{text}}
+      {% endraw %}
       </div>
     
     </template>
