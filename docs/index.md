@@ -76,6 +76,7 @@ index.html
 
 Create your component:  ( component.vue )
 
+```html
     <template>
       <div>
       {% raw %}
@@ -95,6 +96,7 @@ Create your component:  ( component.vue )
           });
         });
     </script>
+```
 
 ---
 
