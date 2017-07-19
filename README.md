@@ -112,9 +112,13 @@ Create your app code: ( app.js )
     });
 ```
 
+## Contributing
+
+[CONTRUBUTING](https://github.com/edgardleal/require-vuejs/blob/master/CONTRIBUTING.md)
 
 ## Licence  
-MIT
+
+[MIT](https://github.com/edgardleal/require-vuejs/blob/master/LICENSE)
 
 ## Code of Conduct  
 
