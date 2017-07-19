@@ -52,7 +52,7 @@ This example on [Codepen](http://codepen.io/edgardleal/pen/XMaeNP/)
 
 index.html
 
-
+```html
     <!DOCTYPE html>
     <html>
         <head>
@@ -66,11 +66,11 @@ index.html
             <script data-main="app" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.3/require.min.js" ></script>
         </body>
     </html>
-
+```
 ---
 
 Create your component:  ( component.vue )
-
+```html
     <template>
       <div>
           {{text}}
@@ -88,11 +88,11 @@ Create your component:  ( component.vue )
           });
         });
     </script>
-
+```
 ---
 
 Create your app code: ( app.js )
-
+```js
     requirejs.config({
         paths: {
             "Vue": "https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.1/vue.min",
@@ -110,7 +110,7 @@ Create your app code: ( app.js )
             el: "#app"
         });
     });
-
+```
 
 
 ## Licence  
