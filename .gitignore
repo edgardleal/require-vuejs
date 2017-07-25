@@ -6,3 +6,4 @@ examples/dist/
 coverage
 *.swp
 *.log
+examples/main-built.js
