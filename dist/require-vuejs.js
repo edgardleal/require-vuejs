@@ -76,7 +76,7 @@ define('template_parser',[], function(){
   
     var extractTemplate = function(text) {
         var start = text.indexOf("<template>");
-        var end   = text.indexOf("</template>");
+        var end   = text.lastIndexOf("</template>");
         return text.substring(start + 10, end)
             .replace(/([^\\])'/g, "$1\\'")
             .replace(/[\n\r]+/g, "")
