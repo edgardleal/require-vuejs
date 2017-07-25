@@ -9,7 +9,7 @@ if (typeof define !== "function") {
 }
 /* jshint ignore:end */
 
-define([], function(){
+define("template_parser", [], function(){
   
     var extractTemplate = function(text) {
         var start = text.indexOf("<template>");

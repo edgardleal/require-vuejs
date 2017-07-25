@@ -10,7 +10,7 @@ if (typeof define !== "function") {
 }
 /* jshint ignore:end */
 
-define(["css_parser", "template_parser", "script_parser"], function(css_parser, template_parser, script_parser) {
+define("plugin", ["css_parser", "template_parser", "script_parser"], function(css_parser, template_parser, script_parser) {
     "use strict";
 
     var modulesLoaded = {};
