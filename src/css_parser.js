@@ -24,7 +24,7 @@ define("css_parser", [], function() {
     };
 
     var appendCSSStyle = function(css) {
-        if(css) {
+        if(css && typeof document !== "undefined") {
             var style = document.createElement("style");
             var head = document.head || document.getElementsByTagName("head")[0];
 
@@ -38,11 +38,23 @@ define("css_parser", [], function() {
             head.appendChild(style);
         }
     };
+
+    var createDocumentMock = function() {
+        return {
+            createElement: function() {},
+            head: {},
+            getElementsByTagName: function() {},
+            createTextNode: function() {}
+        };
+    };
     
     return {
         extractCss: extractCss,
         appendCSSStyle: appendCSSStyle,
         functionString: function(text) {
+            if (typeof document === "undefined")  // you are running optimization ( r.js )
+                var document = createDocumentMock(); // var put it on start of scope 
+
             var css = extractCss(text);
             if ( css === false ) {
                 return "";

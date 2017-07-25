@@ -1,7 +1,26 @@
+
+    var endDefine = /}\);[\n\r\s]*\/\*[^*]*\*\//g;
+    var rDefineSubmodule = /define\([""][^rv].*/;
+    function convertAmd(name, path, contents) {
+        if(rDefineSubmodule.exec(contents)) {
+            return contents
+                .replace(rDefineSubmodule, "var " + name + " = (function(){")
+                .replace(endDefine, "})();");
+        } else {
+            return contents.replace(/define\(([""][^""]+[""])\s*,.*/, "define($1, function(){");
+        }
+    }
+
 module.exports = function(grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
+        copy: {
+            files: {
+                src: "dist/require-vuejs.js",
+                dest: "examples/require-vuejs.js"
+            }
+        },
         jsmeter: {
             all: {
                 files: {
@@ -38,12 +57,15 @@ module.exports = function(grunt) {
                     logLevel: 0,
                     name: "<%= pkg.name %>", 
                     include: ["vue"], // needed to ensure that workds without need define paths 
-                    // onBuildWrite: convertAmd,
+                    onBuildWrite: convertAmd,
                     optimize: "uglify",
+                    wrap: {
+                        start: "(function() {",
+                        end: "})();"
+                    },
                     out: "./dist/<%= pkg.name %>.min.js",
                     skipModuleInsertion: true,
-                    skipSemiColonInsertion: true,
-                    wrap: true
+                    skipSemiColonInsertion: true
                 }
             }, // compile
             dese: {
@@ -63,17 +85,18 @@ module.exports = function(grunt) {
                         end: "})();"
                     },
                     optimize: "none",
-                    // onBuildWrite: convertAmd,
+                    onBuildWrite: convertAmd,
                     out: "./dist/<%= pkg.name %>.js"
                 }
             } // dese
         } // requirejs
     });
 
+    grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-requirejs");
     grunt.loadNpmTasks("grunt-jsmeter");
     grunt.loadNpmTasks("grunt-eslint");
     grunt.loadNpmTasks("grunt-jscpd");
 
-    grunt.registerTask("default", ["eslint", "jscpd", "requirejs:compile", "requirejs:dese"]);
+    grunt.registerTask("default", ["eslint", "jscpd", "requirejs:compile", "requirejs:dese", "copy"]);
 };

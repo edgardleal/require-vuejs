@@ -1,4 +1,13 @@
 (function() {
+/* jshint ignore:start */
+
+/* jshint ignore:end */
+
+define("require_vuejs", function(){
+    return plugin;
+});
+/*vim: set ts=4 ex=4 tabshift=4 expandtab :*/
+
 /*globals: define, require */
 /*
  * css-parser.js
@@ -9,7 +18,7 @@
 
 /* jshint ignore:end */
 
-define("css_parser", [], function() {
+var css_parser = (function(){
     "use strict";
     var extractCss = function(text) {
         var start = text.indexOf("<style>");
@@ -23,7 +32,7 @@ define("css_parser", [], function() {
     };
 
     var appendCSSStyle = function(css) {
-        if(css) {
+        if(css && typeof document !== "undefined") {
             var style = document.createElement("style");
             var head = document.head || document.getElementsByTagName("head")[0];
 
@@ -37,15 +46,32 @@ define("css_parser", [], function() {
             head.appendChild(style);
         }
     };
+
+    var createDocumentMock = function() {
+        return {
+            createElement: function() {},
+            head: {},
+            getElementsByTagName: function() {},
+            createTextNode: function() {}
+        };
+    };
     
     return {
         extractCss: extractCss,
         appendCSSStyle: appendCSSStyle,
         functionString: function(text) {
-            var css = extractCss(text)
-                .replace(/([^\\])'/g, "$1\\'")
-                .replace(/[\n\r]+/g, "")
-                .replace(/ {2,20}/g, " ");
+            if (typeof document === "undefined")  // you are running optimization ( r.js )
+                var document = createDocumentMock(); // var put it on start of scope 
+
+            var css = extractCss(text);
+            if ( css === false ) {
+                return "";
+            } else {
+                css = css
+                    .replace(/([^\\])'/g, "$1\\'")
+                    .replace(/[\n\r]+/g, "")
+                    .replace(/ {2,20}/g, " ");
+            }
 
             var result = "(" + appendCSSStyle.toString() + ")('" + css + "');";
             return result;
@@ -55,8 +81,7 @@ define("css_parser", [], function() {
             appendCSSStyle(css);
         }
     };
-});
-/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
+})();
 
 /*
  * template-parser.js
@@ -67,11 +92,11 @@ define("css_parser", [], function() {
 
 /* jshint ignore:end */
 
-define('template_parser',[], function(){
+var template_parser = (function(){
   
     var extractTemplate = function(text) {
         var start = text.indexOf("<template>");
-        var end   = text.indexOf("</template>");
+        var end   = text.lastIndexOf("</template>");
         return text.substring(start + 10, end)
             .replace(/([^\\])'/g, "$1\\'")
             .replace(/[\n\r]+/g, "")
@@ -83,8 +108,7 @@ define('template_parser',[], function(){
         extractTemplate: extractTemplate
     };
     
-});
-/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
+})();
 
 /*
  * script-parser.js
@@ -97,7 +121,7 @@ define('template_parser',[], function(){
 
 /* jshint ignore:end */
 
-define("script_parser", [], function() {
+var script_parser = (function(){
     return {
         findCloseTag: function(text, start) {
             var i = start;
@@ -111,8 +135,7 @@ define("script_parser", [], function() {
             return text.substring(sizeOfStartTag, end);
         }
     };
-});
-/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
+})();
 
 /*
  * vue.js
@@ -124,7 +147,7 @@ define("script_parser", [], function() {
 
 /* jshint ignore:end */
 
-define('plugin',["css_parser", "template_parser", "script_parser"], function(css_parser, template_parser, script_parser) {
+var plugin = (function(){
     "use strict";
 
     var modulesLoaded = {};
@@ -219,17 +242,7 @@ define('plugin',["css_parser", "template_parser", "script_parser"], function(css
             });
         }
     };
-});
-/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
-
-/* jshint ignore:start */
-
-/* jshint ignore:end */
-
-define('require-vuejs',["plugin"], function(plugin){
-    return plugin;
-});
-/*vim: set ts=4 ex=4 tabshift=4 expandtab :*/
+})();
 
 /**
  * vue.js
@@ -241,7 +254,7 @@ define('require-vuejs',["plugin"], function(plugin){
 
 /* jshint ignore:end */
 
-define("vue", ["plugin"], function(plugin) {
+define("vue", function(){
     return plugin;
 });
 /* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
