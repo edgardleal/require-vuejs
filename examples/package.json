@@ -34,6 +34,7 @@
     "grunt-contrib-requirejs": "^1.0.0",
     "grunt-contrib-uglify": "^2.2.0",
     "grunt-jsmeter": "^0.3.1",
-    "jasmine-node": "^1.14.5"
+    "jasmine-node": "^1.14.5",
+    "simplehttpserver": "0.0.6"
   }
 }

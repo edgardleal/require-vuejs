@@ -177,14 +177,18 @@ var plugin = (function(){
     };
 
     return {
-        normalize: function(name) {
-            return name;
+        normalize: function(name, normalize) {
+            return normalize(name);
         },
         write: function(pluginName, moduleName, write) {
             write.asModule(pluginName + "!" + moduleName, modulesLoaded[moduleName]);
         },
         load: function (name, req, onload, config) {
             var url, extension; 
+
+            if (config.paths && config.paths[name]) {
+                name = config.paths[name];
+            }
 
             // if file name has an extension, don't add .vue
             if(/.*(\.vue)|(\.html?)/.test(name)) {
@@ -195,6 +199,7 @@ var plugin = (function(){
 
             url = req.toUrl(name + extension);
 
+            // this is used to browser to create a way to debug the file 
             var sourceHeader = config.isBuild?"" : "//# sourceURL=" + location.origin + url + "\n";
             var loadRemote;
 
