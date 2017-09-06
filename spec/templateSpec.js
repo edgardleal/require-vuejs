@@ -42,12 +42,13 @@ describe("Parser Templates", function() {
             "  <input/>   <label>Test</label>\n" + 
             "  </template>";
         var result = parser.extractTemplate(template);
-        var expected = " <input/> <label>Test</label> ";
-
-        expect(result).toMatch(expected);
-    
+        var expected = 
+            "'' + \n" + 
+            "' <input/> <label>Test</label>' + \n" + 
+            "' ' + ''";
+        expect(result.length).toBe(expected.length);
+        expect(true).toBe(result === expected);
     });
 
 });
-
 /* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
