@@ -97,11 +97,6 @@ define("plugin", ["css_parser", "template_parser", "script_parser"], function(cs
             }
 
             req([], function() {
-                var normalizeComponent = function(obj) {
-                    if ( typeof obj === "string" ) {
-
-                    }
-                };
                 if(config.isBuild) {
                     var data = loadLocal(url, name);
                     modulesLoaded[name] = data;
