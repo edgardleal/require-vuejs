@@ -16,7 +16,7 @@ requirejs.config({
     }
 });
 
-require(["Vue", "vue!component", "vue!component.html", "vue!alias"], function(Vue){
+require(["Vue", "vue!component", "vue!component.html", "vue!using_alias"], function(Vue){
     new Vue({
         el: "#app"
     });

@@ -113,6 +113,28 @@ Create your app code: ( app.js )
     });
 ```
 
+## Optimize ( r.js )
+
+Create a build file to `r.js`. In this example we are using a file named `build.js`:
+
+```js
+    ({
+        baseUrl: ".",
+        paths: {
+            "Vue": "https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.1/vue",
+            "vue": "require-vuejs" // full path to require-vuejs library file 
+        },
+        name: "app",
+        out: "main-built.js"
+    })
+```
+
+After create the file `build.js` with your build configuration execute this command: 
+
+```bash
+    r.js -o build.js
+```
+
 ## Contributing
 
 [CONTRUBUTING](https://github.com/edgardleal/require-vuejs/blob/master/CONTRIBUTING.md)
