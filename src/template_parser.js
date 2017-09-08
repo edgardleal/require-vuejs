@@ -16,8 +16,8 @@ define("template_parser", [], function(){
         var end   = text.lastIndexOf("</template>");
         return text.substring(start + 10, end)
             .replace(/([^\\])'/g, "$1\\'")
-            .replace(/[\n\r]+/g, "")
-            .replace(/ {2,20}/g, " ");
+            .replace(/^(.*)$/mg, "'$1' + ") // encapsulate template code between ' and put a + 
+            .replace(/ {2,20}/g, " ") + "''";
     };
 
 

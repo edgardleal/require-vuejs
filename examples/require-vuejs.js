@@ -99,8 +99,8 @@ var template_parser = (function(){
         var end   = text.lastIndexOf("</template>");
         return text.substring(start + 10, end)
             .replace(/([^\\])'/g, "$1\\'")
-            .replace(/[\n\r]+/g, "")
-            .replace(/ {2,20}/g, " ");
+            .replace(/^(.*)$/mg, "'$1' + ") // encapsulate template code between ' and put a + 
+            .replace(/ {2,20}/g, " ") + "''";
     };
 
 
@@ -129,7 +129,7 @@ var script_parser = (function(){
             return i;
         },
         extractScript: function(text) {
-            var start = text.indexOf("<script");
+            var start = text.indexOf("<script"); // I don't know why, but someone could use attributes on script tag
             var sizeOfStartTag = this.findCloseTag(text, start);
             var end = text.indexOf("</script>");
             return text.substring(sizeOfStartTag, end);
@@ -163,7 +163,7 @@ var plugin = (function(){
          source +
           functionString +
           functionTemplate[1] +
-          "'" + template + "');";
+          template + ");";
     };
 
     var loadLocal = function(url, name) {
@@ -177,14 +177,18 @@ var plugin = (function(){
     };
 
     return {
-        normalize: function(name) {
-            return name;
+        normalize: function(name, normalize) {
+            return normalize(name);
         },
         write: function(pluginName, moduleName, write) {
             write.asModule(pluginName + "!" + moduleName, modulesLoaded[moduleName]);
         },
         load: function (name, req, onload, config) {
             var url, extension; 
+
+            if (config.paths && config.paths[name]) {
+                name = config.paths[name];
+            }
 
             // if file name has an extension, don't add .vue
             if(/.*(\.vue)|(\.html?)/.test(name)) {
@@ -195,6 +199,7 @@ var plugin = (function(){
 
             url = req.toUrl(name + extension);
 
+            // this is used to browser to create a way to debug the file 
             var sourceHeader = config.isBuild?"" : "//# sourceURL=" + location.origin + url + "\n";
             var loadRemote;
 

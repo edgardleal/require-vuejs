@@ -24,7 +24,7 @@
     "require-vuejs": "^1.0.6",
     "vue-router": "^2.7.0",
     "requirejs": "^2.3.3",
-    "vue": "^2.2.2"
+    "vue": "^2.3.4"
   },
   "devDependencies": {
     "grunt": "^1.0.1",
@@ -34,6 +34,7 @@
     "grunt-contrib-requirejs": "^1.0.0",
     "grunt-contrib-uglify": "^2.2.0",
     "grunt-jsmeter": "^0.3.1",
-    "jasmine-node": "^1.14.5"
+    "jasmine-node": "^1.14.5",
+    "simplehttpserver": "0.0.6"
   }
 }

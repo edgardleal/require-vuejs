@@ -1,15 +1,15 @@
 
-    var endDefine = /}\);[\n\r\s]*\/\*[^*]*\*\//g;
-    var rDefineSubmodule = /define\([""][^rv].*/;
-    function convertAmd(name, path, contents) {
-        if(rDefineSubmodule.exec(contents)) {
-            return contents
-                .replace(rDefineSubmodule, "var " + name + " = (function(){")
-                .replace(endDefine, "})();");
-        } else {
-            return contents.replace(/define\(([""][^""]+[""])\s*,.*/, "define($1, function(){");
-        }
+var endDefine = /}\);[\n\r\s]*\/\*[^*]*\*\//g;
+var rDefineSubmodule = /define\([""][^rv].*/;
+var convertAmd = function (name, path, contents) {
+    if(rDefineSubmodule.exec(contents)) {
+        return contents
+            .replace(rDefineSubmodule, "var " + name + " = (function(){")
+            .replace(endDefine, "})();");
+    } else {
+        return contents.replace(/define\(([""][^""]+[""])\s*,.*/, "define($1, function(){");
     }
+};
 
 module.exports = function(grunt) {
 

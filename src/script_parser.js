@@ -19,7 +19,7 @@ define("script_parser", [], function() {
             return i;
         },
         extractScript: function(text) {
-            var start = text.indexOf("<script");
+            var start = text.indexOf("<script"); // I don't know why, but someone could use attributes on script tag
             var sizeOfStartTag = this.findCloseTag(text, start);
             var end = text.indexOf("</script>");
             return text.substring(sizeOfStartTag, end);

@@ -4,9 +4,9 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON("package.json"),
         jsmeter: {
             all: {
-                    files: {
-                        src: ["app.js"]
-                    },
+                files: {
+                    src: ["app.js"]
+                },
                 options: {
                     dest: "report/",
                 }
