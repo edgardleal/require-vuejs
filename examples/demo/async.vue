@@ -2,7 +2,7 @@
     <div class="card">
         <header class="card-header">
             <p class="card-header-title">
-                This component was loaded with an async 
+                This component was loaded async trigged by vue-router 
             </p>
             <a class="card-header-icon">
                 <span class="icon">
