@@ -1,21 +1,23 @@
-/*
+/* global requirejs, require */
+/**
  * app.js
  *
  * Distributed under terms of the MIT license.
  */
 
 requirejs.config({
-	paths: {
-		"Vue": "https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.1/vue.min",
-		"vue": "https://rawgit.com/edgardleal/require-vue/master/src/require-vue"
-	},
-	shim: {
-		"Vue": {"exports": "Vue"}
-	}
+    paths: {
+        "Vue": "https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue",
+        "vue": ["require-vuejs", "https://rawgit.com/edgardleal/require-vuejs/master/dist/require-vuejs"],
+        "alias": "using_alias"
+    },
+    shim: {
+        "Vue": {"exports": "Vue"}
+    }
 });
 
-require(["Vue", "vue!component"], function(Vue){
-	var app = new Vue({
-		el: "#app"
-	});
+require(["Vue", "vue!component", "vue!component.html", "vue!using_alias"], function(Vue){
+    new Vue({
+        el: "#app"
+    });
 });

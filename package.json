@@ -1,14 +1,20 @@
 {
   "name": "require-vuejs",
-  "version": "1.0.2",
+  "version": "1.0.9",
   "description": "A RequireJS plugin to load and parse VueJS components ( .vue ) ",
-  "main": "src/require-vuejs.js",
+  "main": "dist/require-vuejs.js",
+  "author": "Edgard Leal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/edgardleal/require-vuejs/issues"
+  },
+  "homepage": "https://edgardleal.github.io/require-vuejs/",
   "directories": {
     "doc": "docs",
-    "test": "test"
+    "test": "spec"
   },
   "scripts": {
-    "test": "test"
+    "test": "node node_modules/jasmine-node/bin/jasmine-node ./spec"
   },
   "repository": {
     "type": "git",
@@ -17,22 +23,27 @@
   "keywords": [
     "javascript",
     "vuejs",
-    "require"
+    "requirejs"
   ],
-  "author": "Edgard Leal",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/edgardleal/require-vuejs/issues"
-  },
-  "homepage": "https://github.com/edgardleal/require-vuejs#readme",
   "dependencies": {
-    "vue": "^2.2.2"
+    "requirejs": "^2.3.3",
+    "vue": "^2.3.4",
+    "vue-template-compiler": "^2.3.4"
   },
   "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-vue": "^2.0.2",
+    "eslint-plugin-vue": "^2.1.0",
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-jasmine": "^1.1.0",
     "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-requirejs": "^1.0.0",
     "grunt-contrib-uglify": "^2.2.0",
-    "grunt-contrib-requirejs": "^1.0.0"
+    "grunt-eslint": "^20.0.0",
+    "grunt-jscpd": "0.0.12",
+    "grunt-jsmeter": "^0.3.1",
+    "jasmine-node": "^1.14.5"
   }
 }
