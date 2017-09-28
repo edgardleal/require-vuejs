@@ -1,0 +1,22 @@
+{
+  "name": "require-vuejs",
+  "description": "A RequireJS plugin to load and parse VueJS components ( .vue )",
+  "main": "src/require-vuejs.js",
+  "authors": [
+    "Edgard Leal"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "javascript",
+    "vuejs",
+    "require"
+  ],
+  "homepage": "https://github.com/edgardleal/require-vuejs",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
