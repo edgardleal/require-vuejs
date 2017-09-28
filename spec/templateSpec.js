@@ -50,5 +50,14 @@ describe("Parser Templates", function() {
         expect(true).toBe(result === expected);
     });
 
+    it("Multi tamplate tags", function () {
+        var template = "<template><template><span/></template></template>" ;
+        var result = parser.extractTemplate(template);
+        var expected = "'<template><span/></template>' + ''";
+
+        expect(result).toEqual(expected);
+
+    });
+
 });
 /* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */
