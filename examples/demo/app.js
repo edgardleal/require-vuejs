@@ -26,6 +26,7 @@ require(["Vue", "vue-router"], function(Vue, VueRouter){
 
     var router = new VueRouter({routes: [
         { path: "/home" , component: asyncComp("vue!/demo/home")},
+        { path: "/inner", component: asyncComp("vue!/demo/inner_template")},
         { path: "/html" , component: asyncComp("vue!/demo/component.html")},
         { path: "/vue"  , component: asyncComp("vue!/demo/component")},
         { path: "/async", component: asyncComp("vue!/demo/async")},

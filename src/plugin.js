@@ -87,7 +87,7 @@ define("plugin", ["css_parser", "template_parser", "script_parser"], function(cs
                 loadRemote = function(path, callback) {
                     var xhttp = new XMLHttpRequest();
                     xhttp.onreadystatechange = function() {
-                        if (this.readyState === 4 && (this.status === 200 || this.status === 304)) {
+                        if (xhttp.readyState === 4 && (xhttp.status === 200 || xhttp.status === 304)) {
                             callback(parse(xhttp.responseText));
                         }
                     };
