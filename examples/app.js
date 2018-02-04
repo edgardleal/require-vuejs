@@ -6,6 +6,7 @@
  */
 
 requirejs.config({
+    waitSeconds: 1,
     paths: {
         "Vue": "https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue",
         "vue": ["require-vuejs", "https://rawgit.com/edgardleal/require-vuejs/master/dist/require-vuejs"],

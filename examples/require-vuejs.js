@@ -223,10 +223,18 @@ var plugin = (function(){
             } else {
                 loadRemote = function(path, callback) {
                     var xhttp = new XMLHttpRequest();
+                    xhttp.timeout = (config.waitSeconds || 3) * 1000;
                     xhttp.onreadystatechange = function() {
-                        if (xhttp.readyState === 4 && (xhttp.status === 200 || xhttp.status === 304)) {
+                        if (xhttp.readyState === 4 
+                            && (xhttp.status === 200 
+                                || xhttp.status === 304)) {
                             callback(parse(xhttp.responseText));
                         }
+                    };
+                    xhttp.ontimeout = function() {
+                        var error = new Error("Timeout loading: " + path);
+                        callback({}, error);
+                        throw error;
                     };
                     xhttp.open("GET", path, true);
                     xhttp.send();
@@ -239,7 +247,10 @@ var plugin = (function(){
                     modulesLoaded[name] = data;
                     onload.fromText(data);
                 } else {
-                    loadRemote(url, function(text){
+                    loadRemote(url, function(text, error){
+                        if (error) {
+                            onload.error(error);
+                        }
                         modulesLoaded[name] = sourceHeader + text;
                         onload.fromText(modulesLoaded[name]);
                     });
