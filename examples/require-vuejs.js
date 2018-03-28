@@ -69,6 +69,7 @@ var css_parser = (function(){
             } else {
                 css = css
                     .replace(/([^\\])'/g, "$1\\'")
+                    .replace(/''/g, "'\\'")
                     .replace(/[\n\r]+/g, "")
                     .replace(/ {2,20}/g, " ");
             }
@@ -223,11 +224,12 @@ var plugin = (function(){
             } else {
                 loadRemote = function(path, callback) {
                     var xhttp = new XMLHttpRequest();
-                    xhttp.timeout = (config.waitSeconds || 3) * 1000;
+                    xhttp.timeout = (
+                        (config.waitSeconds || config.timeout) || 3
+                    ) * 1000;
                     xhttp.onreadystatechange = function() {
                         if (xhttp.readyState === 4 
-                            && (xhttp.status === 200 
-                                || xhttp.status === 304)) {
+                            && xhttp.status < 400) {
                             callback(parse(xhttp.responseText));
                         }
                     };

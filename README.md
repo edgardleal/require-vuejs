@@ -5,6 +5,7 @@
 [![Build Status](https://travis-ci.org/edgardleal/require-vuejs.svg?branch=master)](https://travis-ci.org/edgardleal/require-vuejs)
 [![codecov](https://codecov.io/gh/edgardleal/require-vuejs/branch/master/graph/badge.svg)](https://codecov.io/gh/edgardleal/require-vuejs)
 [![Code Climate](https://codeclimate.com/github/edgardleal/require-vuejs/badges/gpa.svg)](https://codeclimate.com/github/edgardleal/require-vuejs)
+
 [![NPM](https://nodei.co/npm/require-vuejs.png)](https://nodei.co/npm/require-vuejs/)
 
 This library has only 4Kb ( minified ).

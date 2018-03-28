@@ -1,5 +1,8 @@
 <template>
-    <div>{{text}}</div>
+    <div>
+		<div>{{text}}</div>
+		<a class="link" href="#" v-text="text"/>
+	</div>
 </template>
 
 <script>
@@ -20,6 +23,10 @@
 
 <style>
 
+.link:hover {
+    content: '';
+	color: red;
+}
 div {
     border: 1px solid;
 }
