@@ -61,6 +61,7 @@ define("css_parser", [], function() {
             } else {
                 css = css
                     .replace(/([^\\])'/g, "$1\\'")
+                    .replace(/''/g, "'\\'")
                     .replace(/[\n\r]+/g, "")
                     .replace(/ {2,20}/g, " ");
             }
