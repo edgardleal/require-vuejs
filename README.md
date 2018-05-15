@@ -17,7 +17,7 @@ This library has only 4Kb ( minified ).
 * Used as RequireJS plugin 
 * You can use syntax detection from your IDE
 * Suport for [single file component](https://vuejs.org/v2/guide/single-file-components.html)
-* Work with or without extencion
+* Work with or without extension
 * Support .html and .vue files 
 * CSS inside component file
 
@@ -26,7 +26,7 @@ This library has only 4Kb ( minified ).
 * Scoped css 
 
 ## CDN 
-Developent ( last version )
+Development ( last version )
 
 
     https://rawgit.com/edgardleal/require-vuejs/master/dist/require-vuejs.js
@@ -139,9 +139,9 @@ After create the file `build.js` with your build configuration execute this comm
 
 ## Contributing
 
-[CONTRUBUTING](https://github.com/edgardleal/require-vuejs/blob/master/CONTRIBUTING.md)
+[CONTRIBUTING](https://github.com/edgardleal/require-vuejs/blob/master/CONTRIBUTING.md)
 
-## Licence  
+## License  
 
 [MIT](https://github.com/edgardleal/require-vuejs/blob/master/LICENSE)
 
