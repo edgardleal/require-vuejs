@@ -20,31 +20,51 @@ define("require_vuejs", function(){
 
 var css_parser = (function(){
     "use strict";
-    var extractCss = function(text) {
-        var start = text.indexOf("<style>");
-        var end = text.indexOf("</style>");
+    var idCount = 0;
 
-        if( start === -1 ) {
-            return false;
-        } else {
-            return text.substring(start + 7, end);
-        }
-    };
-
-    var appendCSSStyle = function(css) {
+    var appendCSSStyle = function(css, id) {
         if(css && typeof document !== "undefined") {
-            var style = document.createElement("style");
+            var style = document.getElementById("style_" + id);
+            if (style) {
+                return style;
+            }
+            style = document.createElement("style");
             var head = document.head || document.getElementsByTagName("head")[0];
 
             style.type = "text/css";
+            style.id = "style_" + id;
             if (style.styleSheet){
                 style.styleSheet.cssText = css;
             } else {
                 style.appendChild(document.createTextNode(css));
             }
-
             head.appendChild(style);
+            return style;
         }
+    };
+
+    var functionString = function(parsed) {
+        if (typeof document === "undefined")  // you are running optimization ( r.js )
+            var document = createDocumentMock();
+
+        var css = parsed.css;
+        var attributeId = "data-style" + idCount;
+        if ( css === false ) {
+            return "";
+        } else {
+            if (parsed.scoped) {
+                css = css
+                    .replace(/(^|,)( *)\.([^ \s\n\r\t]+)[\s{]/gm, "$1$2[" + attributeId + "].$3");
+            }
+            css = css // turn into one line
+                .replace(/([^\\])'/g, "$1\\'")
+                .replace(/''/g, "'\\'")
+                .replace(/[\n\r]+/g, " ")
+                .replace(/ {2,20}/g, " ");
+        }
+
+        var result = "(" + appendCSSStyle.toString() + ")('" + css + "', " + idCount + ");\n";
+        return result;
     };
 
     var createDocumentMock = function() {
@@ -55,32 +75,32 @@ var css_parser = (function(){
             createTextNode: function() {}
         };
     };
+
+    var parseElement = function(doc) {
+        idCount = idCount + 1;
+        var queryResult = doc.getElementsByTagName("style");
+        if (!queryResult || !queryResult.length) {
+            return {
+                id: 0,
+                css: "",
+                scoped: false,
+                functionString: "function() {}"
+            };
+        }
+        var style = queryResult[0];
+        var scoped = style.hasAttribute("scoped");
+
+        var result = {};
+        result.css = style.innerHTML;
+        result.id = idCount;
+        result.scoped = scoped;
+        result.functionString =  functionString(result);
+
+        return result;
+    };
     
     return {
-        extractCss: extractCss,
-        appendCSSStyle: appendCSSStyle,
-        functionString: function(text) {
-            if (typeof document === "undefined")  // you are running optimization ( r.js )
-                var document = createDocumentMock(); // var put it on start of scope 
-
-            var css = extractCss(text);
-            if ( css === false ) {
-                return "";
-            } else {
-                css = css
-                    .replace(/([^\\])'/g, "$1\\'")
-                    .replace(/''/g, "'\\'")
-                    .replace(/[\n\r]+/g, "")
-                    .replace(/ {2,20}/g, " ");
-            }
-
-            var result = "(" + appendCSSStyle.toString() + ")('" + css + "');";
-            return result;
-        },
-        parse: function(text) {
-            var css = extractCss(text);
-            appendCSSStyle(css);
-        }
+        parseElement: parseElement
     };
 })();
 
@@ -94,48 +114,53 @@ var css_parser = (function(){
 /* jshint ignore:end */
 
 var template_parser = (function(){
-  
-    var extractTemplate = function(text) {
-        var start = text.indexOf("<template>");
-        var end   = text.lastIndexOf("</template>");
-        return text.substring(start + 10, end)
+    var isOnBrowser = !!document;
+
+    var parseOnBrowser = function(text, css_result) {
+        var root;
+        if (typeof text === "string") {
+            root = document.createElement("div");
+            root.insertAdjacentHTML("afterbegin", text);
+        } else {
+            root = text;
+        }
+
+        var queryResult = root.getElementsByTagName("template");
+        if (!queryResult || !queryResult.length) {
+            return "";
+        }
+        var template = queryResult[0];
+
+        if (css_result.scoped) {
+            template.innerHTML = template
+                .innerHTML.replace(/([ \t]+class=['"])/g, " data-style" + css_result.id + "$1");
+        }
+
+        return clearTemplateText(template.innerHTML);
+    };
+
+    var clearTemplateText = function(text) {
+        if (!text) {  return ""; }
+        return text
             .replace(/([^\\])'/g, "$1\\'")
-            .replace(/^(.*)$/mg, "'$1' + ") // encapsulate template code between ' and put a + 
+            .replace(/^(.*)$/mg, "'$1' + ") // encapsulate template code between ' and put a +
             .replace(/ {2,20}/g, " ") + "''";
     };
 
+    var extractTemplate = function(text) {
+        var start = text.indexOf("<template>");
+        var end   = text.lastIndexOf("</template>");
+        return clearTemplateText(text.substring(start + 10, end));
+    };
+
+    if (isOnBrowser) {
+        extractTemplate = parseOnBrowser;
+    }
 
     return {
         extractTemplate: extractTemplate
     };
     
-})();
-
-/*
- * script-parser.js
- * Copyright (C) 2017 Edgard Leal
- *
- * Distributed under terms of the MIT license.
- */
-
-/* jshint ignore:start */
-
-/* jshint ignore:end */
-
-var script_parser = (function(){
-    return {
-        findCloseTag: function(text, start) {
-            var i = start;
-            while(i < text.length && text[i++] !== ">");
-            return i;
-        },
-        extractScript: function(text) {
-            var start = text.indexOf("<script"); // I don't know why, but someone could use attributes on script tag
-            var sizeOfStartTag = this.findCloseTag(text, start);
-            var end = text.indexOf("</script>");
-            return text.substring(sizeOfStartTag, end);
-        }
-    };
 })();
 
 /*
@@ -156,9 +181,12 @@ var plugin = (function(){
     var functionTemplate = ["(function(template){", "})("];
 
     var parse = function(text) {
-        var template = template_parser.extractTemplate(text);
-        var source = script_parser.extractScript(text);
-        var functionString = css_parser.functionString(text);
+        var doc = document.implementation.createHTMLDocument("");
+        doc.write(text);
+        var source = doc.getElementsByTagName("script")[0].innerHTML;
+        var css_result = css_parser.parseElement(doc);
+        var template = template_parser.extractTemplate(doc, css_result);
+        var functionString = css_result.functionString;
  
         return functionTemplate[0] +
          source +
@@ -206,6 +234,7 @@ var plugin = (function(){
 
             if(config.isBuild) {
                 loadRemote = function(url, callback) {
+                    callback = callback || function() {};
                     return new Promise(function(resolve, reject) {
                         try {
                             var fs = require.nodeRequire("fs");
@@ -223,23 +252,29 @@ var plugin = (function(){
                 };
             } else {
                 loadRemote = function(path, callback) {
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.timeout = (
-                        (config.waitSeconds || config.timeout) || 3
-                    ) * 1000;
-                    xhttp.onreadystatechange = function() {
-                        if (xhttp.readyState === 4 
-                            && xhttp.status < 400) {
-                            callback(parse(xhttp.responseText));
-                        }
-                    };
-                    xhttp.ontimeout = function() {
-                        var error = new Error("Timeout loading: " + path);
-                        callback({}, error);
-                        throw error;
-                    };
-                    xhttp.open("GET", path, true);
-                    xhttp.send();
+                    callback = callback || function() {};
+                    return new Promise(function(resolve, reject) {
+                        var xhttp = new XMLHttpRequest();
+                        xhttp.timeout = (
+                            (config.waitSeconds || config.timeout) || 3
+                        ) * 1000;
+                        xhttp.onreadystatechange = function() {
+                            if (xhttp.readyState === 4
+                          && xhttp.status < 400) {
+                                var result = parse(xhttp.responseText);
+                                callback(result);
+                                resolve(result);
+                            }
+                        };
+                        xhttp.ontimeout = function() {
+                            var error = new Error("Timeout loading: " + path);
+                            callback({}, error);
+                            reject(error);
+                            throw error;
+                        };
+                        xhttp.open("GET", path, true);
+                        xhttp.send();
+                    });
                 };
             }
 
@@ -249,13 +284,20 @@ var plugin = (function(){
                     modulesLoaded[name] = data;
                     onload.fromText(data);
                 } else {
-                    loadRemote(url, function(text, error){
-                        if (error) {
-                            onload.error(error);
-                        }
-                        modulesLoaded[name] = sourceHeader + text;
-                        onload.fromText(modulesLoaded[name]);
-                    });
+                    loadRemote(url)
+                        .then(function(text, error){
+                            if (error) {
+                                onload.error(error);
+                                throw new Error("Error loading: " + url);
+                            }
+                            modulesLoaded[name] = sourceHeader + text;
+                            onload.fromText(modulesLoaded[name]);
+                        })
+                        .catch(function(error) {
+                            var message = error ? error.message || "Error: " : "Error !";
+                            message += "\n Url: " + url;
+                            throw new Error(message);
+                        });
                 }
             });
         }

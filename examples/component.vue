@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div class="box">
 		<div>{{text}}</div>
-		<a class="link" href="#" v-text="text"/>
+		<a class="link" href="#" v-text="text"></a>
 	</div>
 </template>
 
@@ -10,7 +10,7 @@
         var result = Vue.extend({
             template: template,
             data: function() {
-                return {"text": "Ok from component.vue"};
+                return {"text": "Ok from component.vue using scoped css"};
             }
         });
 
@@ -21,11 +21,15 @@
     });
 </script>
 
-<style>
+<style scoped>
+
+.box {
+	height: 50px;
+}
 
 .link:hover {
     content: '';
-	color: red;
+	  color: red;
 }
 div {
     border: 1px solid;

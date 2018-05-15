@@ -12,31 +12,51 @@ if (typeof define !== "function") {
 
 define("css_parser", [], function() {
     "use strict";
-    var extractCss = function(text) {
-        var start = text.indexOf("<style>");
-        var end = text.indexOf("</style>");
+    var idCount = 0;
 
-        if( start === -1 ) {
-            return false;
-        } else {
-            return text.substring(start + 7, end);
-        }
-    };
-
-    var appendCSSStyle = function(css) {
+    var appendCSSStyle = function(css, id) {
         if(css && typeof document !== "undefined") {
-            var style = document.createElement("style");
+            var style = document.getElementById("style_" + id);
+            if (style) {
+                return style;
+            }
+            style = document.createElement("style");
             var head = document.head || document.getElementsByTagName("head")[0];
 
             style.type = "text/css";
+            style.id = "style_" + id;
             if (style.styleSheet){
                 style.styleSheet.cssText = css;
             } else {
                 style.appendChild(document.createTextNode(css));
             }
-
             head.appendChild(style);
+            return style;
         }
+    };
+
+    var functionString = function(parsed) {
+        if (typeof document === "undefined")  // you are running optimization ( r.js )
+            var document = createDocumentMock();
+
+        var css = parsed.css;
+        var attributeId = "data-style" + idCount;
+        if ( css === false ) {
+            return "";
+        } else {
+            if (parsed.scoped) {
+                css = css
+                    .replace(/(^|,)( *)\.([^ \s\n\r\t]+)[\s{]/gm, "$1$2[" + attributeId + "].$3");
+            }
+            css = css // turn into one line
+                .replace(/([^\\])'/g, "$1\\'")
+                .replace(/''/g, "'\\'")
+                .replace(/[\n\r]+/g, " ")
+                .replace(/ {2,20}/g, " ");
+        }
+
+        var result = "(" + appendCSSStyle.toString() + ")('" + css + "', " + idCount + ");\n";
+        return result;
     };
 
     var createDocumentMock = function() {
@@ -47,32 +67,32 @@ define("css_parser", [], function() {
             createTextNode: function() {}
         };
     };
+
+    var parseElement = function(doc) {
+        idCount = idCount + 1;
+        var queryResult = doc.getElementsByTagName("style");
+        if (!queryResult || !queryResult.length) {
+            return {
+                id: 0,
+                css: "",
+                scoped: false,
+                functionString: "function() {}"
+            };
+        }
+        var style = queryResult[0];
+        var scoped = style.hasAttribute("scoped");
+
+        var result = {};
+        result.css = style.innerHTML;
+        result.id = idCount;
+        result.scoped = scoped;
+        result.functionString =  functionString(result);
+
+        return result;
+    };
     
     return {
-        extractCss: extractCss,
-        appendCSSStyle: appendCSSStyle,
-        functionString: function(text) {
-            if (typeof document === "undefined")  // you are running optimization ( r.js )
-                var document = createDocumentMock(); // var put it on start of scope 
-
-            var css = extractCss(text);
-            if ( css === false ) {
-                return "";
-            } else {
-                css = css
-                    .replace(/([^\\])'/g, "$1\\'")
-                    .replace(/''/g, "'\\'")
-                    .replace(/[\n\r]+/g, "")
-                    .replace(/ {2,20}/g, " ");
-            }
-
-            var result = "(" + appendCSSStyle.toString() + ")('" + css + "');";
-            return result;
-        },
-        parse: function(text) {
-            var css = extractCss(text);
-            appendCSSStyle(css);
-        }
+        parseElement: parseElement
     };
 });
 /* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab : */

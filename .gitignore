@@ -7,3 +7,4 @@ coverage
 *.swp
 *.log
 examples/main-built.js
+.idea

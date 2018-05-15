@@ -10,7 +10,7 @@ if (typeof define !== "function") {
 }
 /* jshint ignore:end */
 
-define("plugin", ["css_parser", "template_parser", "script_parser"], function(css_parser, template_parser, script_parser) {
+define("plugin", ["css_parser", "template_parser"], function(css_parser, template_parser) {
     "use strict";
 
     var modulesLoaded = {};
@@ -18,9 +18,12 @@ define("plugin", ["css_parser", "template_parser", "script_parser"], function(cs
     var functionTemplate = ["(function(template){", "})("];
 
     var parse = function(text) {
-        var template = template_parser.extractTemplate(text);
-        var source = script_parser.extractScript(text);
-        var functionString = css_parser.functionString(text);
+        var doc = document.implementation.createHTMLDocument("");
+        doc.write(text);
+        var source = doc.getElementsByTagName("script")[0].innerHTML;
+        var css_result = css_parser.parseElement(doc);
+        var template = template_parser.extractTemplate(doc, css_result);
+        var functionString = css_result.functionString;
  
         return functionTemplate[0] +
          source +
@@ -68,6 +71,7 @@ define("plugin", ["css_parser", "template_parser", "script_parser"], function(cs
 
             if(config.isBuild) {
                 loadRemote = function(url, callback) {
+                    callback = callback || function() {};
                     return new Promise(function(resolve, reject) {
                         try {
                             var fs = require.nodeRequire("fs");
@@ -85,23 +89,29 @@ define("plugin", ["css_parser", "template_parser", "script_parser"], function(cs
                 };
             } else {
                 loadRemote = function(path, callback) {
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.timeout = (
-                        (config.waitSeconds || config.timeout) || 3
-                    ) * 1000;
-                    xhttp.onreadystatechange = function() {
-                        if (xhttp.readyState === 4 
-                            && xhttp.status < 400) {
-                            callback(parse(xhttp.responseText));
-                        }
-                    };
-                    xhttp.ontimeout = function() {
-                        var error = new Error("Timeout loading: " + path);
-                        callback({}, error);
-                        throw error;
-                    };
-                    xhttp.open("GET", path, true);
-                    xhttp.send();
+                    callback = callback || function() {};
+                    return new Promise(function(resolve, reject) {
+                        var xhttp = new XMLHttpRequest();
+                        xhttp.timeout = (
+                            (config.waitSeconds || config.timeout) || 3
+                        ) * 1000;
+                        xhttp.onreadystatechange = function() {
+                            if (xhttp.readyState === 4
+                          && xhttp.status < 400) {
+                                var result = parse(xhttp.responseText);
+                                callback(result);
+                                resolve(result);
+                            }
+                        };
+                        xhttp.ontimeout = function() {
+                            var error = new Error("Timeout loading: " + path);
+                            callback({}, error);
+                            reject(error);
+                            throw error;
+                        };
+                        xhttp.open("GET", path, true);
+                        xhttp.send();
+                    });
                 };
             }
 
@@ -111,13 +121,20 @@ define("plugin", ["css_parser", "template_parser", "script_parser"], function(cs
                     modulesLoaded[name] = data;
                     onload.fromText(data);
                 } else {
-                    loadRemote(url, function(text, error){
-                        if (error) {
-                            onload.error(error);
-                        }
-                        modulesLoaded[name] = sourceHeader + text;
-                        onload.fromText(modulesLoaded[name]);
-                    });
+                    loadRemote(url)
+                        .then(function(text, error){
+                            if (error) {
+                                onload.error(error);
+                                throw new Error("Error loading: " + url);
+                            }
+                            modulesLoaded[name] = sourceHeader + text;
+                            onload.fromText(modulesLoaded[name]);
+                        })
+                        .catch(function(error) {
+                            var message = error ? error.message || "Error: " : "Error !";
+                            message += "\n Url: " + url;
+                            throw new Error(message);
+                        });
                 }
             });
         }
