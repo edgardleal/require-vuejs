@@ -1,5 +1,5 @@
-# require-vuejs
-> RequireJS plugin to async and dynamic load and parse .vue single file components 
+# systemjs-vue-inbrowser
+> SystemJS plugin to async and dynamic load and parse .vue single file components 
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e431a6e1ba314ba7a4b3debfc9643503)](https://www.codacy.com/app/edgardleal/require-vuejs?utm_source=github.com&utm_medium=referral&utm_content=edgardleal/require-vuejs&utm_campaign=badger)
 [![Build Status](https://travis-ci.org/edgardleal/require-vuejs.svg?branch=master)](https://travis-ci.org/edgardleal/require-vuejs)
