@@ -76,7 +76,7 @@ define("css_parser", [], function() {
                 id: 0,
                 css: "",
                 scoped: false,
-                functionString: "function() {}"
+                functionString: ""
             };
         }
         var style = queryResult[0];

@@ -84,7 +84,7 @@ var css_parser = (function(){
                 id: 0,
                 css: "",
                 scoped: false,
-                functionString: "function() {}"
+                functionString: ""
             };
         }
         var style = queryResult[0];
@@ -183,10 +183,15 @@ var plugin = (function(){
     var parse = function(text) {
         var doc = document.implementation.createHTMLDocument("");
         doc.write(text);
-        var source = doc.getElementsByTagName("script")[0].innerHTML;
+        var scriptElement = doc.getElementsByTagName("script")[0];
+        var source = scriptElement.innerHTML;
         var css_result = css_parser.parseElement(doc);
         var template = template_parser.extractTemplate(doc, css_result);
         var functionString = css_result.functionString;
+        if (!source || source.length < 10) {
+            source = scriptElement.src;
+            source = "define(['" + source + "'], function(comp) {\n comp.template = template;\n return comp;\n});\n";
+        }
  
         return functionTemplate[0] +
          source +

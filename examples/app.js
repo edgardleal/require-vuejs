@@ -17,7 +17,16 @@ requirejs.config({
     }
 });
 
-require(["Vue", "vue!component", "vue!component.html", "vue!using_alias"], function(Vue){
+require([
+   "Vue", 
+   "vue!js_in_different_file",
+   "vue!component", 
+   "vue!component.html", 
+   "vue!using_alias",
+   ], function(Vue, comp){
+
+    window.Vue = Vue;
+    Vue.component('count-click', comp);
     new Vue({
         el: "#app"
     });
