@@ -36,7 +36,7 @@ For production usage: ( Fast CDN, long age cache and minified )
 
     https://cdn.rawgit.com/edgardleal/require-vuejs/aeaff6db/dist/require-vuejs.min.js
 
-## Instalation from [NPM repository](https://www.npmjs.com/package/require-vuejs)
+## Installation from [NPM repository](https://www.npmjs.com/package/require-vuejs)
 
 `npm install require-vuejs`
 
