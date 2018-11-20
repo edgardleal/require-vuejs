@@ -182,7 +182,7 @@ var plugin = (function(){
 
     var parse = function(text) {
         var doc = document.implementation.createHTMLDocument("");
-        doc.write(text);
+        doc.body.innerHTML = text;
         var scriptElement = doc.getElementsByTagName("script")[0];
         var source = scriptElement.innerHTML;
         var css_result = css_parser.parseElement(doc);
