@@ -1,6 +1,6 @@
 {
   "name": "require-vuejs",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "A RequireJS plugin to load and parse VueJS components ( .vue ) ",
   "main": "dist/require-vuejs.js",
   "author": "Edgard Leal",
