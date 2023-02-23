@@ -1,6 +1,7 @@
 
 var endDefine = /}\);[\n\r\s]*\/\*[^*]*\*\//g;
-var rDefineSubmodule = /define\([""][^rv].*/;
+//var rDefineSubmodule = /define\([""][^rv].*/;
+var rDefineSubmodule = /define\([\s\S]*?{/;
 var convertAmd = function (name, path, contents) {
     if(rDefineSubmodule.exec(contents)) {
         return contents
