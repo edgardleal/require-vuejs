@@ -1,4 +1,4 @@
-/*
+﻿/*
  * vue.js
  *
  * Distributed under terms of the MIT license.
@@ -10,7 +10,7 @@ if (typeof define !== "function") {
 }
 /* jshint ignore:end */
 
-define("plugin", ["css_parser", "template_parser"], function(css_parser, template_parser) {
+define("plugin", ["css_parser", "template_parser", "template_preprocessor", "style_import"], function (css_parser, template_parser, template_preprocessor, style_import) {
     "use strict";
 
     var modulesLoaded = {};
@@ -19,7 +19,9 @@ define("plugin", ["css_parser", "template_parser"], function(css_parser, templat
 
     var parse = function(text) {
         var doc = document.implementation.createHTMLDocument("");
-        doc.body.innerHTML = text;
+        //doc.body.innerHTML = text;
+        /* 单标记、驼峰命名属性等预处理，石永琳，2021-6-15 */
+        doc.body.innerHTML = template_preprocessor.handle(text);  //text;
         var scriptElement = doc.getElementsByTagName("script")[0];
         var source = scriptElement.innerHTML;
         var css_result = css_parser.parseElement(doc);
@@ -48,6 +50,18 @@ define("plugin", ["css_parser", "template_parser"], function(css_parser, templat
     };
 
     return {
+        /**
+         * 暴露 sfc 解析函数, 2023-1-16
+         *
+        ==================================================================================*/
+        parseSfc: parse,
+        helper: {
+            preprocessor: template_preprocessor,
+            css_parser,
+            template_parser,
+            style_import
+        },
+        /*=================================================================================*/
         normalize: function(name, normalize) {
             return normalize(name);
         },
@@ -61,6 +75,11 @@ define("plugin", ["css_parser", "template_parser"], function(css_parser, templat
                 name = config.paths[name];
             }
 
+            // 增加对 razor page 的处理，2021-6-29
+            if (/.*(\.cs)/.test(name)) {
+                name = name.substring(0, name.length - 3);
+                extension = "";
+            } else
             // if file name has an extension, don't add .vue
             if(/.*(\.vue)|(\.html?)/.test(name)) {
                 extension = "";
@@ -101,13 +120,31 @@ define("plugin", ["css_parser", "template_parser"], function(css_parser, templat
                             (config.waitSeconds || config.timeout) || 3
                         ) * 1000;
                         xhttp.onreadystatechange = function() {
-                            if (xhttp.readyState === 4
-                          && xhttp.status < 400) {
-                                var result = parse(xhttp.responseText);
-                                callback(result);
-                                resolve(result);
+                            //if (xhttp.readyState === 4
+                            //    && xhttp.status < 400) {
+                            //    var result = parse(xhttp.responseText);
+                            //    callback(result);
+                            //    resolve(result);
+                            //}
+                            if (xhttp.readyState === 4) {
+                                if (xhttp.status < 400) {
+                                    style_import.loadAndMerge(path, xhttp.responseText, req)
+                                        .then(merged => {
+                                            var result = parse(merged);
+                                            callback(result);
+                                            resolve(result);
+                                        })
+                                }
+                                else {
+                                    reject(xhttp.status)
+                                    throw "No response available for request:" + path + ", status code: " + xhttp.status
+                                }
                             }
                         };
+                        xhttp.onerror = function (e) {
+                            reject(e)
+                            throw "Error loading: " + path;
+                        }
                         xhttp.ontimeout = function() {
                             var error = new Error("Timeout loading: " + path);
                             callback({}, error);
