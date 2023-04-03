@@ -1,4 +1,4 @@
-/*globals: define, require */
+﻿/*globals: define, require */
 /*
  * css-parser.js
  *
@@ -45,8 +45,14 @@ define("css_parser", [], function() {
             return "";
         } else {
             if (parsed.scoped) {
-                css = css
-                    .replace(/(^|,)( *)\.([^ \s\n\r\t]+)[\s{]/gm, "$1$2[" + attributeId + "].$3");
+                //css = css
+                //    .replace(/(^|,)( *)\.([^ \s\n\r\t]+)[\s{]/gm, "$1$2[" + attributeId + "].$3");
+
+                /* 修改 css scoped 实现，2021-6-17 */
+                // 匹配html tag或 css类
+                // css html tag -- \s+[\w-]+
+                // css class -- \.[\w-]+
+                css = css.replace(/(\s+[\w-]+|\.[\w-]+)\s*{/gm, "$1[" + attributeId + "] {");
             }
             css = css // turn into one line
                 .replace(/([^\\])'/g, "$1\\'")
@@ -68,7 +74,14 @@ define("css_parser", [], function() {
         };
     };
 
-    var parseElement = function(doc) {
+    var parseElement = function (doc) {
+        // todo: 以下实现，同一个文件由于加载次序不同，style id会不同
+        // 在《systemjs+compiler-sfc 实现浏览器端渲染 .vue 文件》中
+        // https://zhuanlan.zhihu.com/p/408745521，用以下算法实现：
+        // return res.text().then(function (source) {
+        // var id = hash.sum(url + source);
+        // var dataVId = 'data-v-' + id;
+        // 这样的 style id 只于文件本身有关，与加载次序无关，可以借鉴
         idCount = idCount + 1;
         var queryResult = doc.getElementsByTagName("style");
         if (!queryResult || !queryResult.length) {
@@ -86,11 +99,53 @@ define("css_parser", [], function() {
         result.css = style.innerHTML;
         result.id = idCount;
         result.scoped = scoped;
-        result.functionString =  functionString(result);
+        //result.functionString =  functionString(result);
 
-        return result;
+        //return result;
+
+        /* for less.js override */
+        if (!checkLess(style)) {
+            result.functionString = functionString(result);
+            return result
+        }
+
+        return parseLess(result);
     };
-    
+
+    // 是否解析less
+    var checkLess = function (rawStyle) {
+        // 非 less
+        if (!rawStyle.hasAttribute("lang")
+            || rawStyle.getAttribute("lang").toLowerCase() != "less") {
+            return false;
+        }
+        // 无 less.js
+        if (!less || !less.render) {
+            return false
+        }
+
+        return true
+    }
+
+    var parseLess = function (parsedStyle) {
+        let parse_result = parsedStyle;
+
+        // 调用 less.js 解析less
+        less.render(parse_result.css, function (err, less_result) {
+            if (err) {
+                console.log(err);
+                console.log("parsed style =>");
+                console.log(parse_result);
+            }
+            else {
+                parse_result.css = less_result.css;
+                parse_result.functionString = functionString(parse_result);
+            }
+        });
+
+        return parse_result;
+    }
+
     return {
         parseElement: parseElement
     };
